@@ -1,52 +1,24 @@
-import styled, { keyframes } from "styled-components";
+import styled from "styled-components";
 
+const Title = styled.h1`
+  color: ${(props) => props.theme.textColor};
+`;
+  
 const Wrapper = styled.div`
+  width: 100vw;
+  height: 100vh;
   display : flex;
-`;
-
-const rotaionAnimation = keyframes`
-0%{
-  transform: rotate(0deg);
-  border-radius: 0px;
-}
-50%{
-  border-radius: 100px;
-}
-100%{
-  transform: rotate(360deg);
-}
-`;
-const Emoji = styled.span`
-  font-size: 36px;
-`;
-const Box = styled.div`
-  height: 200px;
-  width: 200px;
-  background-color: tomato;
-  animation : ${rotaionAnimation} 3s linear infinite;
-  /* (js)string interpolation으로 key frame 사용 */
-  display: flex;
   justify-content: center;
   align-items: center;
-  span:active {
-    opacity: 0;
-  }
-  /* SCSS처럼~, 스타일 컴포넌츠 하위 tag에 대해 selector, psudo selector 사용 가능 */
-  ${Emoji} {
-    &:hover {
-      font-size: 100px;
-    }
-  }
-  /* styled-components 명으로도 하위 컴포넌츠에 대해 css 속성 정의 가능 */
+  background-color:  ${(props)=> props.theme.backgroundColor};
 `;
+/*  index.js에서 ThemeProvider의 theme props의 property 이름(textColor, backgroundColor) */
+  
 
 function App() {
   return (
     <Wrapper>
-      <Box>
-        <Emoji as="p">😎</Emoji>
-      </Box>
-        <Emoji>😎</Emoji>
+      <Title>Hello</Title>
     </Wrapper>
   );
 }
