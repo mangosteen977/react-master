@@ -1,8 +1,9 @@
 import styled from "styled-components";
+import { useState } from "react";
 
 interface ContainerProps {
   bgColor: string;
-  borderColor: string; //required props
+  borderColor: string;
 }
 const Container = styled.div<ContainerProps>`
   width: 200px;
@@ -15,22 +16,15 @@ const Container = styled.div<ContainerProps>`
 `;
 
 interface CircleProps {
-  bgColor: string; //required
-  borderColor?: string; //optional (name?: type)
-  text?: string;
+  bgColor: string;
+  borderColor?: string;
 }
-// interface : object shape 설명. 코드 실행 전 확인/에러.
-// propType의 경우 코드 실행 후 확인/에러
 
-function Circle({ bgColor, borderColor, text = "default text" }: CircleProps) {
-  // CircleProps.text?: string | undefined : optional
-  // default value 설정 => text = "default text"
-  return (
-    <Container bgColor={bgColor} borderColor={borderColor ?? bgColor}>
-      {/* interface ContainerProps > borderColor : required,
-          default value 설정 => borderColor={propsName ?? "default"} */}
-      {text}
-    </Container>
-  );
+function Circle({ bgColor, borderColor }: CircleProps) {
+  const [counter, setCounter] = useState(0); // default 값에 따라 TS가 state type 인식함.
+  // const [counter, setCounter] = useState<number | string>(0);
+  // state의 type 1개 이상 직접 지정
+  // setCounter("dd") // TS에서 useState init 초기값을 바탕으로 type이 안맞으면 경고
+  return <Container bgColor={bgColor} borderColor={borderColor ?? bgColor} />;
 }
 export default Circle;
