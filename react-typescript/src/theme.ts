@@ -2,7 +2,7 @@
 import { DefaultTheme } from "styled-components";
 // styled.d.ts(declatations 파일의 props명과 동일하게)
 export const theme: DefaultTheme = {
-  textColor: "black",
-  bgColor: "white",
-  btnColor: "tomamto",
+  bgColor: "#2f3640",
+  textColor: "#f5f6fa",
+  accentColor: "#44bd32",
 };

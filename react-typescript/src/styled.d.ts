@@ -8,6 +8,6 @@ declare module "styled-components" {
     // 이곳에 theme의 props 및 type 정의
     textColor: string;
     bgColor: string;
-    btnColor: string;
+    accentColor: string;
   }
 }
