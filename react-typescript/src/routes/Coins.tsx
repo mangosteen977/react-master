@@ -62,9 +62,10 @@ function Coins() {
   // 배열 형태의 CoinInterface임으로 <CoinInterface[]>로 표기
   useEffect(() => {
     (async () => {
-      const response = await fetch("https://api.coinpaprika.com/v1/coins");
-      const json = await response.json();
-      setCoins(json.slice(0, 100));
+      const response = await (
+        await fetch("https://api.coinpaprika.com/v1/coins")
+      ).json();
+      setCoins(response.slice(0, 100));
       setLoading(false);
     })();
     /*
@@ -86,7 +87,13 @@ function Coins() {
         <CoinList>
           {coins.map((coin) => (
             <Coin key={coin.id}>
-              <Link to={`/${coin.id}`}>
+              <Link
+                to={{
+                  pathname: `/${coin.id}`,
+                  state: { name: coin.name },
+                }}
+              >
+                {/* Link to ={{object 형태로 전달}}, pathname/search/hash/state */}
                 <Img
                   src={`https://coinicons-api.vercel.app/api/icon/${coin.symbol.toLowerCase()}`}
                   alt={`${coin.name}'s image`}
