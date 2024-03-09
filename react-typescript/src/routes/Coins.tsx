@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
@@ -31,51 +32,58 @@ const Title = styled.h1`
   color: ${(props) => props.theme.accentColor};
   font-size: 48px;
 `;
+const Loader = styled.div`
+  text-align: center;
+  padding: 54px;
+`;
 
-const coins = [
-  {
-    id: "btc-bitcoin",
-    name: "Bitcoin",
-    symbol: "BTC",
-    rank: 1,
-    is_new: false,
-    is_active: true,
-    type: "coin",
-  },
-  {
-    id: "eth-ethereum",
-    name: "Ethereum",
-    symbol: "ETH",
-    rank: 2,
-    is_new: false,
-    is_active: true,
-    type: "coin",
-  },
-  {
-    id: "hex-hex",
-    name: "HEX",
-    symbol: "HEX",
-    rank: 3,
-    is_new: false,
-    is_active: true,
-    type: "token",
-  },
-];
+interface CoinInterface {
+  id: string;
+  name: string;
+  symbol: string;
+  rank: number;
+  is_new: boolean;
+  is_active: boolean;
+  type: string;
+}
 
 function Coins() {
+  const [coins, setCoins] = useState<CoinInterface[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  // state의 type을 interface로 명시
+  // 배열 형태의 CoinInterface임으로 <CoinInterface[]>로 표기
+  useEffect(() => {
+    (async () => {
+      const response = await fetch("https://api.coinpaprika.com/v1/coins");
+      const json = await response.json();
+      setCoins(json.slice(0, 100));
+      setLoading(false);
+    })();
+    /*
+      1. (() => ...)(); => 즉시 실행되는 function.
+      2. coinpaprika 코인파프리카 API : 가상 화폐 정보, 2024.03.09기준 67636개
+        https://api.coinpaprika.com/v1/coins
+      
+    */
+  }, []);
+  console.log(coins);
   return (
     <Container>
       <Header>
         <Title>Coin</Title>
       </Header>
-      <CoinList>
-        {coins.map((coin) => (
-          <Coin key={coin.id}>
-            <Link to={`/${coin.id}`}>{coin.name} &rarr;</Link>
-          </Coin>
-          // &rarr; :  →
-        ))}
-      </CoinList>
+      {loading ? (
+        <Loader>loading...</Loader>
+      ) : (
+        <CoinList>
+          {coins.map((coin) => (
+            <Coin key={coin.id}>
+              <Link to={`/${coin.id}`}>{coin.name} &rarr;</Link>
+            </Coin>
+            // &rarr; :  →
+          ))}
+        </CoinList>
+      )}
     </Container>
   );
 }
