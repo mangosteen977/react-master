@@ -4,9 +4,11 @@ import styled from "styled-components";
 
 const Container = styled.div`
   padding: 0px 20px;
+  max-width: 480px;
+  margin: 0 auto;
 `;
 const Header = styled.header`
-  height: 10vh;
+  height: 15vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -16,11 +18,13 @@ const Coin = styled.li`
   background-color: white;
   color: ${(props) => props.theme.bgColor};
   margin-bottom: 10px;
-  border-radius: 10px;
+  border-radius: 15px;
   a {
+    display: flex;
+    gap: 10px;
+    align-items: center;
     padding: 20px;
     transition: color 0.2s ease-in;
-    display: block;
   }
   &:hover {
     a {
@@ -35,6 +39,10 @@ const Title = styled.h1`
 const Loader = styled.div`
   text-align: center;
   padding: 54px;
+`;
+const Img = styled.img`
+  width: 35px;
+  height: 35px;
 `;
 
 interface CoinInterface {
@@ -66,7 +74,7 @@ function Coins() {
       
     */
   }, []);
-  console.log(coins);
+  // console.log(coins);
   return (
     <Container>
       <Header>
@@ -78,7 +86,13 @@ function Coins() {
         <CoinList>
           {coins.map((coin) => (
             <Coin key={coin.id}>
-              <Link to={`/${coin.id}`}>{coin.name} &rarr;</Link>
+              <Link to={`/${coin.id}`}>
+                <Img
+                  src={`https://coinicons-api.vercel.app/api/icon/${coin.symbol.toLowerCase()}`}
+                  alt={`${coin.name}'s image`}
+                />
+                {coin.name} &rarr;
+              </Link>
             </Coin>
             // &rarr; :  →
           ))}
