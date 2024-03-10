@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
+import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { fetchCoins } from "../api";
 // common
 const Container = styled.div`
   padding: 0px 20px;
@@ -57,36 +59,37 @@ interface CoinInterface {
 }
 
 function Coins() {
-  const [coins, setCoins] = useState<CoinInterface[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  // state의 type을 interface로 명시
-  // 배열 형태의 CoinInterface임으로 <CoinInterface[]>로 표기
-  useEffect(() => {
-    (async () => {
-      const response = await (
-        await fetch("https://api.coinpaprika.com/v1/coins")
-      ).json();
-      setCoins(response.slice(0, 100));
-      setLoading(false);
-    })();
-    /*
-      1. (() => ...)(); => 즉시 실행되는 function.
-      2. coinpaprika 코인파프리카 API : 가상 화폐 정보, 2024.03.09기준 67636개
-        https://api.coinpaprika.com/v1/coins
-      
-    */
-  }, []);
+  const { isLoading, data } = useQuery<CoinInterface[]>("allCoins", fetchCoins);
+  // const [coins, setCoins] = useState<CoinInterface[]>([]);
+  // const [loading, setLoading] = useState<boolean>(true);
+  // // state의 type을 interface로 명시
+  // // 배열 형태의 CoinInterface임으로 <CoinInterface[]>로 표기
+  // useEffect(() => {
+  //   (async () => {
+  //     const response = await (
+  //       await fetch("https://api.coinpaprika.com/v1/coins")
+  //     ).json();
+  //     setCoins(response.slice(0, 100));
+  //     setLoading(false);
+  //   })();
+  //   /*
+  //     1. (() => ...)(); => 즉시 실행되는 function.
+  //     2. coinpaprika 코인파프리카 API : 가상 화폐 정보, 2024.03.09기준 67636개
+  //       https://api.coinpaprika.com/v1/coins
+
+  //   */
+  // }, []);
   // console.log(coins);
   return (
     <Container>
       <Header>
         <Title>Coin</Title>
       </Header>
-      {loading ? (
+      {isLoading ? (
         <Loader>loading...</Loader>
       ) : (
         <CoinList>
-          {coins.map((coin) => (
+          {data?.slice(0, 100).map((coin) => (
             <Coin key={coin.id}>
               <Link
                 to={{
