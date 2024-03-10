@@ -1,7 +1,17 @@
 import { useState, useEffect } from "react";
-import { useParams, useLocation } from "react-router";
+import {
+  Switch,
+  Route,
+  useParams,
+  useLocation,
+  useRouteMatch,
+} from "react-router";
+// useRouteMatch : 특정 URL에 있는 지 여부를 확인
+import { Link } from "react-router-dom";
 import styled from "styled-components";
-
+import Chart from "./Chart";
+import Price from "./Price";
+// common
 const Container = styled.div`
   padding: 0px 20px;
   max-width: 480px;
@@ -21,12 +31,60 @@ const Loader = styled.div`
   text-align: center;
   padding: 54px;
 `;
+// coin
+const Overview = styled.div`
+  display: flex;
+  justify-content: space-between;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 10px 20px;
+  border-radius: 10px;
+`;
+const OverviewItem = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  span:first-child {
+    font-size: 10px;
+    font-weight: 400;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+  }
+`;
+const Description = styled.p`
+  margin: 20px 0px;
+`;
+const Tabs = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  margin: 25px 0px;
+  gap: 10px;
+`;
+
+const Tab = styled.span<{ $isActive: boolean }>`
+  // $isActive: Tab에서 props로 전달된 값(useRouteMatch로 url 매치 확인)
+  // $붙은 이유 : React18 이후 일관성을 높이고, 사용자 혼동을 방지하기 위해
+  // prop의 이름은 소문자나 앞에 $가 있어야만 사용자 지정 속성으로 인식
+  text-align: center;
+  text-transform: uppercase;
+  font-size: 12px;
+  font-weight: 400;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 7px 0px;
+  border-radius: 10px;
+  color: ${(props) =>
+    props.$isActive ? props.theme.accentColor : props.theme.textColor};
+  a {
+    display: block;
+  }
+`;
+// interface
 interface RouteParams {
   coinId: string;
 }
 interface RouteState {
   name: string;
 }
+// interface of json data
 interface InfoData {
   id: string;
   name: string;
@@ -81,14 +139,18 @@ interface PriceData {
     };
   };
 }
+
 function Coin() {
   const [loading, setLoading] = useState<boolean>(true);
   const [info, setInfo] = useState<InfoData>();
-  const [price, setPrice] = useState<PriceData>();
+  const [priceInfo, setPriceInfo] = useState<PriceData>();
   const { coinId } = useParams<RouteParams>(); // interface로 param type 명시
   //   const { coinId } = useParams<{ coinId: string }>(); // useParams에 param type 직접 명시
   const { state } = useLocation<RouteState>();
   // useLocation() : Link to={{}} object로 전달한 값 가져옴
+  const priceMatch = useRouteMatch("/:coinId/price");
+  const chartMatch = useRouteMatch("/:coinId/chart");
+  // useRouteMatch : URL이 일치하는 지 여부를 확인 (isExact : true / null)
 
   useEffect(() => {
     (async () => {
@@ -99,16 +161,67 @@ function Coin() {
         await fetch(`https://api.coinpaprika.com/v1/tickers/${coinId}`)
       ).json();
       setInfo(infoData);
-      setPrice(priceData);
+      setPriceInfo(priceData);
       setLoading(false);
     })();
-  }, []);
+  }, [coinId]);
   return (
     <Container>
       <Header>
-        <Title>{state?.name || "Loading..."}</Title>
+        <Title>
+          {state?.name ? state.name : loading ? "Loading..." : info?.name}
+        </Title>
       </Header>
-      {loading ? <Loader>loading...</Loader> : null}
+      {loading ? (
+        <Loader>Loading...</Loader>
+      ) : (
+        <>
+          <Overview>
+            <OverviewItem>
+              <span>Rank:</span>
+              <span>{info?.rank}</span>
+            </OverviewItem>
+            <OverviewItem>
+              <span>Symbol:</span>
+              <span>${info?.symbol}</span>
+            </OverviewItem>
+            <OverviewItem>
+              <span>Open Source:</span>
+              <span>{info?.open_source ? "Yes" : "No"}</span>
+            </OverviewItem>
+          </Overview>
+          <Description>{info?.description}</Description>
+          <Overview>
+            <OverviewItem>
+              <span>Total Suply:</span>
+              <span>{priceInfo?.total_supply}</span>
+            </OverviewItem>
+            <OverviewItem>
+              <span>Max Supply:</span>
+              <span>{priceInfo?.max_supply}</span>
+            </OverviewItem>
+          </Overview>
+
+          <Tabs>
+            <Tab $isActive={chartMatch !== null ? true : false}>
+              <Link to={`/${coinId}/chart`}>Chart</Link>
+            </Tab>
+            <Tab $isActive={priceMatch !== null ? true : false}>
+              <Link to={`/${coinId}/price`}>Price</Link>
+            </Tab>
+          </Tabs>
+
+          {/* nested router : 중첩 된 route */}
+          <Switch>
+            <Route path={"/:coinId/price"}>
+              <Price />
+            </Route>
+            <Route path={"/:coinId/chart"}>
+              <Chart />
+            </Route>
+          </Switch>
+        </>
+      )}
     </Container>
   );
 }
