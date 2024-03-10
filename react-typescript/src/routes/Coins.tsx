@@ -60,6 +60,8 @@ interface CoinInterface {
 
 function Coins() {
   const { isLoading, data } = useQuery<CoinInterface[]>("allCoins", fetchCoins);
+  // { isLoading, data } = useQuery("query key(unique)", fetcher function);
+
   // const [coins, setCoins] = useState<CoinInterface[]>([]);
   // const [loading, setLoading] = useState<boolean>(true);
   // // state의 type을 interface로 명시
