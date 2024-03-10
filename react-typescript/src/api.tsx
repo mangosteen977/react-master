@@ -18,8 +18,8 @@ export async function fetchCoinTickers(coinId: String) {
 }
 
 /* react query (useQuery)
-    fetch + caching (reload 시 api를 다시 호출 하지 않고 캐시 데이터를 반환)
-    ReactQueryDevtools을 app.tsx에 import해서 query명 별로 데이터 확인 가능 (패치, 리셋 등 action 가능)
-    
     { isLoading, data } = useQuery("query key(unique)", fetcher function);
-    */
+    ->
+    fetch + caching (query key를 바탕으로 reload 시 api를 다시 호출 하지 않고 캐시 데이터를 반환)
+    ReactQueryDevtools을 app.tsx에 import해서 query명 별로 데이터 확인 가능 (패치, 리셋 등 action 가능)
+*/
