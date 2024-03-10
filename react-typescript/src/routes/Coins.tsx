@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-
+// common
 const Container = styled.div`
   padding: 0px 20px;
   max-width: 480px;
@@ -13,6 +13,15 @@ const Header = styled.header`
   justify-content: center;
   align-items: center;
 `;
+const Title = styled.h1`
+  color: ${(props) => props.theme.accentColor};
+  font-size: 48px;
+`;
+const Loader = styled.div`
+  text-align: center;
+  padding: 54px;
+`;
+// coins
 const CoinList = styled.ul``;
 const Coin = styled.li`
   background-color: white;
@@ -32,19 +41,11 @@ const Coin = styled.li`
     }
   }
 `;
-const Title = styled.h1`
-  color: ${(props) => props.theme.accentColor};
-  font-size: 48px;
-`;
-const Loader = styled.div`
-  text-align: center;
-  padding: 54px;
-`;
 const Img = styled.img`
   width: 35px;
   height: 35px;
 `;
-
+// interface of json data
 interface CoinInterface {
   id: string;
   name: string;
