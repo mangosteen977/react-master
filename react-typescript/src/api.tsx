@@ -1,4 +1,5 @@
 const BASE_URL = `https://api.coinpaprika.com/v1`;
+const NOMAD_URL = `https://ohlcv-api.nomadcoders.workers.dev`;
 
 export async function fetchCoins() {
   return fetch(`${BASE_URL}/coins`).then((response) => response.json());
@@ -16,6 +17,11 @@ export async function fetchCoinTickers(coinId: String) {
   );
 }
 
+export async function fetchCoinHisttory(coinId: string) {
+  return fetch(`${NOMAD_URL}?coinId=${coinId}`).then((response) =>
+    response.json()
+  );
+}
 /* react query (useQuery)
     { isLoading, data } = useQuery("query key(unique)", fetcher function);
     ->
