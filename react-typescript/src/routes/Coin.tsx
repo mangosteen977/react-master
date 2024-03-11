@@ -152,14 +152,21 @@ function Coin() {
   const chartMatch = useRouteMatch("/:coinId/chart");
   // useRouteMatch : URL이 일치하는 지 여부를 확인 (isExact : true / null)
 
+  // argument를 필요로하는 fetcher 함수 (react query / useQuery)
   const { isLoading: infoLoading, data: infoData } = useQuery<InfoData>(
-    ["info", "coinId"],
-    () => fetchCoinInfo(coinId)
+    // useQuery의 return값의 이름을 바꿈(js).
+    // object의 property를 가져와 syntax(:)로 이름 수정(isLoading: infoLoading).
+    ["info", "coinId"], // unique key를 동일하게 coinId를 사용하기 때문에 추가 key를 배열형태로 씀.
+    // 첫번 째 key가 카테고리 역할을 하고(info), 두번 째 key가 unique key역할을 함.
+    () => fetchCoinInfo(coinId) // 해당 fetcher함수에 argument를 넘겨야 하기 때문에 익명함수를 만들어서 fetcher함수를 불러서 return함
+    // 만약 argument가 없다면 익명함수[()=>]없이 fetcher함수만 씀.
   );
   const { isLoading: tickersLoading, data: tickersData } = useQuery<PriceData>(
     ["tickers", "coinId"],
     () => fetchCoinTickers(coinId)
   );
+
+  // reactQuery 대신 useEffect+useState hoock 사용하는 방법
   // const [loading, setLoading] = useState<boolean>(true);
   // const [info, setInfo] = useState<InfoData>();
   // const [priceInfo, setPriceInfo] = useState<PriceData>();
@@ -176,6 +183,7 @@ function Coin() {
   //     setLoading(false);
   //   })();
   // }, [coinId]);
+
   const loading = tickersLoading || infoLoading;
   return (
     <Container>
