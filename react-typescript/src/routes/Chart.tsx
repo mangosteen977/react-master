@@ -50,18 +50,55 @@ function Chart({ coinId }: IChartProps) {
         </Loader>
       ) : (
         <ApexCharts
-          type="line"
+          type="candlestick"
+          // series={[
+          // {
+          //   name: "Close price",
+          //   color: "#546E7A",
+          //   data:
+          //     data && !data.error
+          //       ? data.map((price) => Number(price.close))
+          //       : [],
+          //   // data: data?.map((price) => Number(price.close)) ?? [],
+          //   // data 없거나 error반환인 경우 빈 배열, 있을 경우 string->Number로 종가(close)만 반환
+          // },
+          // ]}
           series={[
             {
-              name: "Close price",
               data:
                 data && !data.error
-                  ? data.map((price) => Number(price.close))
+                  ? data.map((price) => [
+                      price.time_open * 1000,
+                      Number(price.open),
+                      Number(price.high),
+                      Number(price.low),
+                      Number(price.close),
+                    ])
                   : [],
-              // data: data?.map((price) => Number(price.close)) ?? [],
-              // data 없거나 error반환인 경우 빈 배열, 있을 경우 string->Number로 종가(close)만 반환
             },
           ]}
+          // options={{
+          //   chart: {
+          //     type: "candlestick",
+          //     width: 500,
+          //     height: 500,
+          //     toolbar: { show: false },
+          //     background: "transparent",
+          //   },
+          //   title: {
+          //     text: "CandleStick Chart",
+          //     align: "left",
+          //   },
+          //   xaxis: {
+          //     type: "datetime",
+          //   },
+          //   yaxis: {
+          //     tooltip: {
+          //       enabled: true,
+
+          //     },
+          //   },
+          // }}
           options={{
             chart: {
               width: 500,
@@ -71,27 +108,46 @@ function Chart({ coinId }: IChartProps) {
             },
             theme: { mode: "dark" },
             grid: { show: false },
-            stroke: {
-              curve: "smooth",
-              width: 5,
-            },
+            // stroke: {
+            //   curve: "smooth",
+            //   width: 5,
+            // },
             yaxis: { show: false },
             xaxis: {
+              type: "datetime",
               axisBorder: { show: false },
               axisTicks: { show: false },
               labels: { show: false },
+              // categories:
+              // data && !data.error
+              //   ? data.map((price) => {
+              //       let day = new Date(price.time_open * 1000);
+              //       let y = day.getFullYear();
+              //       let m = String(day.getMonth() + 1);
+              //       let d = String(day.getDate());
+              //       m = Number(m) >= 10 ? m : "0" + m;
+              //       d = Number(d) >= 10 ? d : "0" + d;
+              //       return `${y}-${m}-${d}`;
+              //     })
+              //   : "",
             },
-            fill: {
-              type: "gradient",
-              gradient: {
-                gradientToColors: ["#fbc531"],
-                stops: [0, 100],
-              },
-            },
+            // fill: {
+            //   type: "gradient",
+            //   gradient: {
+            //     gradientToColors: ["#fbc531"],
+            //     stops: [0, 100],
+            //   },
+            // },
             tooltip: {
-              y: {
-                formatter: (value) => `$${value.toFixed(2)}`,
+              // marker: {
+              //   show: true,
+              // },
+              style: {
+                fontSize: "12px",
               },
+              // y: {
+              // formatter: (value) => `$${value.toFixed(2)}`,
+              // },
             },
           }}
         />
