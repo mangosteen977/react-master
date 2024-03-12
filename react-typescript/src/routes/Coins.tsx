@@ -86,6 +86,7 @@ function Coins() {
     <Container>
       <Helmet>
         <title>Coin</title>
+        <Title>Coin</Title>
       </Helmet>
       <Header>
         <Title>Coin</Title>

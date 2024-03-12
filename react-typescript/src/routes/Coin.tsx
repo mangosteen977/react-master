@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
 import { useQuery } from "react-query";
+import { Helmet } from "react-helmet";
 import {
   Switch,
   Route,
@@ -163,7 +163,12 @@ function Coin() {
   );
   const { isLoading: tickersLoading, data: tickersData } = useQuery<PriceData>(
     ["tickers", "coinId"],
-    () => fetchCoinTickers(coinId)
+    () => fetchCoinTickers(coinId),
+    {
+      refetchInterval: 5000, // 5000ms(5s)
+    }
+    // fetch interval 설정 (milliseconds 단위)
+    // background에서 주기적으로 앱을 업데이트, 데이터 실시간 반영
   );
 
   // reactQuery 대신 useEffect+useState hoock 사용하는 방법
@@ -187,6 +192,11 @@ function Coin() {
   const loading = tickersLoading || infoLoading;
   return (
     <Container>
+      <Helmet>
+        <title>
+          {state?.name ? state.name : loading ? "Loading..." : infoData?.name}
+        </title>
+      </Helmet>
       <Header>
         <Title>
           {state?.name ? state.name : loading ? "Loading..." : infoData?.name}
@@ -206,8 +216,8 @@ function Coin() {
               <span>${infoData?.symbol}</span>
             </OverviewItem>
             <OverviewItem>
-              <span>Open Source:</span>
-              <span>{infoData?.open_source ? "Yes" : "No"}</span>
+              <span>Price(USD):</span>
+              <span>{tickersData?.quotes.USD.price.toFixed(3)}</span>
             </OverviewItem>
           </Overview>
           <Description>{infoData?.description}</Description>

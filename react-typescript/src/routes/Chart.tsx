@@ -31,6 +31,7 @@ function Chart({ coinId }: IChartProps) {
   // 방법 1) react-router-dom에서 useParams로 parameter를 가져오기
   // const param = useParams();
   // 방법 2) 부모 컴포넌츠에서 props로 전달 받기.
+
   const { isLoading, data } = useQuery<IHistorical[] & IHistoricalError>(
     ["chart", coinId],
     () => fetchCoinHisttory(coinId)
