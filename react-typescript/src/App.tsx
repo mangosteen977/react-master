@@ -1,6 +1,11 @@
 import Router from "./Router";
 import { createGlobalStyle } from "styled-components";
 import { ReactQueryDevtools } from "react-query/devtools";
+// DarkMode
+import { ThemeProvider } from "styled-components";
+import { themeDark, themeLight } from "./theme";
+import { useRecoilValue } from "recoil";
+import { isDarkModeAtom } from "./atoms";
 
 // createGlobalStyle : styled-components의 property,
 // createGlobalStyle로 생성 된 컴포넌츠를 렌더링 시, 전역 스코프에 스타일을 올림
@@ -70,11 +75,15 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 function App() {
+  // recoil(Atom state), DarkMode/LightMode
+  const isDarkMode = useRecoilValue(isDarkModeAtom);
   return (
     <>
-      <GlobalStyle />
-      <Router />
-      <ReactQueryDevtools />
+      <ThemeProvider theme={isDarkMode ? themeDark : themeLight}>
+        <GlobalStyle />
+        <Router />
+        <ReactQueryDevtools />
+      </ThemeProvider>
     </>
     //<></> : Fragment, 유령 컴포넌츠, 부모없이 여러 컴포넌츠가 위치할 수 있음
   );

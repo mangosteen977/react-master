@@ -3,6 +3,8 @@ import { useQuery } from "react-query";
 import { fetchCoinHisttory } from "../api";
 import ApexCharts from "react-apexcharts";
 import styled from "styled-components";
+import { useRecoilValue } from "recoil";
+import { isDarkModeAtom } from "../atoms";
 
 const Loader = styled.div`
   text-align: center;
@@ -43,6 +45,8 @@ function Chart({ coinId }: IChartProps) {
   // // Date.now()는 현재 시간을 밀리초로 나타냄, 1000으로 나눠서 초로 바꿈.
   // const startDate = endDate - 60 * 60 * 24 * 7;
   // // 1주전 시간초 : 현재 시간 - 1주에 해당하는 초.
+
+  const isDarkMode = useRecoilValue(isDarkModeAtom);
   return (
     <div>
       {!isLoading && (!data || data.error) ? (
@@ -51,55 +55,27 @@ function Chart({ coinId }: IChartProps) {
         </Loader>
       ) : (
         <ApexCharts
-          type="candlestick"
-          // series={[
-          // {
-          //   name: "Close price",
-          //   color: "#546E7A",
-          //   data:
-          //     data && !data.error
-          //       ? data.map((price) => Number(price.close))
-          //       : [],
-          //   // data: data?.map((price) => Number(price.close)) ?? [],
-          //   // data 없거나 error반환인 경우 빈 배열, 있을 경우 string->Number로 종가(close)만 반환
-          // },
-          // ]}
+          type="line"
           series={[
             {
+              name: "Close price",
+              color: "#546E7A",
               data:
                 data && !data.error
-                  ? data.map((price) => [
-                      price.time_open * 1000,
-                      Number(price.open),
-                      Number(price.high),
-                      Number(price.low),
-                      Number(price.close),
-                    ])
+                  ? data.map((price) => Number(price.close))
+                  : [],
+              // data: data?.map((price) => Number(price.close)) ?? [],
+              // data 없거나 error반환인 경우 빈 배열, 있을 경우 string->Number로 종가(close)만 반환
+            },
+            {
+              name: "Open price",
+              color: "#66DA26",
+              data:
+                data && !data.error
+                  ? data.map((price) => Number(price.open))
                   : [],
             },
           ]}
-          // options={{
-          //   chart: {
-          //     type: "candlestick",
-          //     width: 500,
-          //     height: 500,
-          //     toolbar: { show: false },
-          //     background: "transparent",
-          //   },
-          //   title: {
-          //     text: "CandleStick Chart",
-          //     align: "left",
-          //   },
-          //   xaxis: {
-          //     type: "datetime",
-          //   },
-          //   yaxis: {
-          //     tooltip: {
-          //       enabled: true,
-
-          //     },
-          //   },
-          // }}
           options={{
             chart: {
               width: 500,
@@ -107,48 +83,47 @@ function Chart({ coinId }: IChartProps) {
               toolbar: { show: false },
               background: "transparent",
             },
-            theme: { mode: "dark" },
+            theme: { mode: isDarkMode ? "dark" : "light" },
             grid: { show: false },
-            // stroke: {
-            //   curve: "smooth",
-            //   width: 5,
-            // },
+            stroke: {
+              curve: "smooth",
+              width: 4,
+            },
             yaxis: { show: false },
             xaxis: {
-              type: "datetime",
               axisBorder: { show: false },
-              axisTicks: { show: false },
               labels: { show: false },
-              // categories:
-              // data && !data.error
-              //   ? data.map((price) => {
-              //       let day = new Date(price.time_open * 1000);
-              //       let y = day.getFullYear();
-              //       let m = String(day.getMonth() + 1);
-              //       let d = String(day.getDate());
-              //       m = Number(m) >= 10 ? m : "0" + m;
-              //       d = Number(d) >= 10 ? d : "0" + d;
-              //       return `${y}-${m}-${d}`;
-              //     })
-              //   : "",
+              tooltip: {
+                enabled: false,
+              },
+
+              categories:
+                data && !data.error
+                  ? data.map((price) => {
+                      let day = new Date(price.time_open * 1000);
+                      let y = day.getFullYear();
+                      let m = String(day.getMonth() + 1);
+                      let d = String(day.getDate());
+                      m = Number(m) >= 10 ? m : "0" + m;
+                      d = Number(d) >= 10 ? d : "0" + d;
+                      return `${y}-${m}-${d}`;
+                    })
+                  : "",
             },
-            // fill: {
-            //   type: "gradient",
-            //   gradient: {
-            //     gradientToColors: ["#fbc531"],
-            //     stops: [0, 100],
-            //   },
-            // },
+            fill: {
+              type: "gradient",
+              gradient: {
+                gradientToColors: ["#fbc531"],
+                stops: [0, 100],
+              },
+            },
             tooltip: {
-              // marker: {
-              //   show: true,
-              // },
               style: {
                 fontSize: "12px",
               },
-              // y: {
-              // formatter: (value) => `$${value.toFixed(2)}`,
-              // },
+              y: {
+                formatter: (value) => `$${value.toFixed(2)}`,
+              },
             },
           }}
         />

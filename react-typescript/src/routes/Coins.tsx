@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { fetchCoins } from "../api";
 import { Helmet } from "react-helmet";
+import Footer from "../components/Footer";
 // common
 const Container = styled.div`
   padding: 0px 20px;
@@ -26,8 +27,8 @@ const Loader = styled.div`
 // coins
 const CoinList = styled.ul``;
 const Coin = styled.li`
-  background-color: white;
-  color: ${(props) => props.theme.bgColor};
+  background-color: ${(props) => props.theme.listColor};
+  color: ${(props) => props.theme.textColor};
   margin-bottom: 10px;
   border-radius: 15px;
   a {
@@ -115,6 +116,7 @@ function Coins() {
           ))}
         </CoinList>
       )}
+      <Footer />
     </Container>
   );
 }

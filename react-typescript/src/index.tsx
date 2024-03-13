@@ -1,9 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { ThemeProvider } from "styled-components";
 import App from "./App";
-import { theme } from "./theme";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { RecoilRoot } from "recoil";
+// 상태관리 라이브러리(Atom은 상태(state)의 일부를 나타냄), dark/light 모드 구현
 
 const queryClient = new QueryClient();
 
@@ -11,11 +11,11 @@ const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 root.render(
-  <QueryClientProvider client={queryClient}>
-    <ThemeProvider theme={theme}>
+  <RecoilRoot>
+    <QueryClientProvider client={queryClient}>
       <App />
-    </ThemeProvider>
-  </QueryClientProvider>
+    </QueryClientProvider>
+  </RecoilRoot>
 );
 
 // npm i react-router-dom@5.3.0 react-query
