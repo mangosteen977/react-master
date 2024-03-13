@@ -11,9 +11,14 @@ import {
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import Chart from "./Chart";
+import CandleStick from "./CandleStick";
 import Price from "./Price";
 import { fetchCoinInfo, fetchCoinTickers } from "../api";
 // fetcher functions from api.tsx (react query)
+import backSvg from "../assets/back.svg";
+// *.svg에 대한 TS 타입 추가
+// src/custom.d.ts, tsconfig/include에 src.custom.d.ts추가
+import Footer from "../components/Footer";
 // common
 const Container = styled.div`
   padding: 0px 20px;
@@ -34,11 +39,15 @@ const Loader = styled.div`
   text-align: center;
   padding: 54px;
 `;
+const Img = styled.img`
+  width: 35px;
+  height: 35px;
+`;
 // coin
 const Overview = styled.div`
   display: flex;
   justify-content: space-between;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: ${(props) => props.theme.listColor};
   padding: 10px 20px;
   border-radius: 10px;
 `;
@@ -58,11 +67,10 @@ const Description = styled.p`
 `;
 const Tabs = styled.div`
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   margin: 25px 0px;
   gap: 10px;
 `;
-
 const Tab = styled.span<{ $isActive: boolean }>`
   // $isActive: Tab에서 props로 전달된 값(useRouteMatch로 url 매치 확인)
   // $붙은 이유 : React18 이후 일관성을 높이고, 사용자 혼동을 방지하기 위해
@@ -71,7 +79,7 @@ const Tab = styled.span<{ $isActive: boolean }>`
   text-transform: uppercase;
   font-size: 12px;
   font-weight: 400;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: ${(props) => props.theme.listColor};
   padding: 7px 0px;
   border-radius: 10px;
   color: ${(props) =>
@@ -80,6 +88,25 @@ const Tab = styled.span<{ $isActive: boolean }>`
     display: block;
   }
 `;
+const Nav = styled.div`
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+`;
+const Btn = styled.div`
+  background-color: transparent;
+  a {
+    display: block;
+    width: 35px;
+    height: 35px;
+    img {
+      /* filter: invert(1); // black */
+      filter: invert(${(props) => props.theme.backBtn}); // white
+      object-fit: cover;
+    }
+  }
+`;
+
 // interface
 interface RouteParams {
   coinId: string;
@@ -150,6 +177,7 @@ function Coin() {
   // useLocation() : Link to={{}} object로 전달한 값 가져옴
   const priceMatch = useRouteMatch("/:coinId/price");
   const chartMatch = useRouteMatch("/:coinId/chart");
+  const candleMatch = useRouteMatch("/:coinId/candle-stick");
   // useRouteMatch : URL이 일치하는 지 여부를 확인 (isExact : true / null)
 
   // argument를 필요로하는 fetcher 함수 (react query / useQuery)
@@ -165,7 +193,7 @@ function Coin() {
     ["tickers", "coinId"],
     () => fetchCoinTickers(coinId),
     {
-      refetchInterval: 5000, // 5000ms(5s)
+      // refetchInterval: 5000, // 5000ms(5s)
     }
     // fetch interval 설정 (milliseconds 단위)
     // background에서 주기적으로 앱을 업데이트, 데이터 실시간 반영
@@ -197,6 +225,13 @@ function Coin() {
           {state?.name ? state.name : loading ? "Loading..." : infoData?.name}
         </title>
       </Helmet>
+      <Nav>
+        <Btn>
+          <Link to="/">
+            <Img src={backSvg} alt="back button" />
+          </Link>
+        </Btn>
+      </Nav>
       <Header>
         <Title>
           {state?.name ? state.name : loading ? "Loading..." : infoData?.name}
@@ -213,7 +248,7 @@ function Coin() {
             </OverviewItem>
             <OverviewItem>
               <span>Symbol:</span>
-              <span>${infoData?.symbol}</span>
+              <span>{infoData?.symbol}</span>
             </OverviewItem>
             <OverviewItem>
               <span>Price(USD):</span>
@@ -234,7 +269,10 @@ function Coin() {
 
           <Tabs>
             <Tab $isActive={chartMatch !== null ? true : false}>
-              <Link to={`/${coinId}/chart`}>Chart</Link>
+              <Link to={`/${coinId}/chart`}>LineChart</Link>
+            </Tab>
+            <Tab $isActive={candleMatch !== null ? true : false}>
+              <Link to={`/${coinId}/candle-stick`}>CandleStick</Link>
             </Tab>
             <Tab $isActive={priceMatch !== null ? true : false}>
               <Link to={`/${coinId}/price`}>Price</Link>
@@ -249,9 +287,13 @@ function Coin() {
             <Route path={"/:coinId/chart"}>
               <Chart coinId={coinId} />
             </Route>
+            <Route path={"/:coinId/candle-stick"}>
+              <CandleStick coinId={coinId} />
+            </Route>
           </Switch>
         </>
       )}
+      <Footer />
     </Container>
   );
 }
