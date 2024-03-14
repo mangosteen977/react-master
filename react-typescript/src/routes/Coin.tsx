@@ -16,6 +16,11 @@ import Price from "./Price";
 import { fetchCoinInfo, fetchCoinTickers } from "../api";
 // fetcher functions from api.tsx (react query)
 import backSvg from "../assets/back.svg";
+import home from "../assets/home.svg";
+import facebook from "../assets/facebook.svg";
+import reddit from "../assets/reddit.svg";
+import github from "../assets/github.svg";
+import youtube from "../assets/youtube.svg";
 // *.svg에 대한 TS 타입 추가
 // src/custom.d.ts, tsconfig/include에 src.custom.d.ts추가
 import Footer from "../components/Footer";
@@ -26,10 +31,14 @@ const Container = styled.div`
   margin: 0 auto;
 `;
 const Header = styled.header`
-  height: 15vh;
+  /* height: 15vh; */
+  height: fit-content;
+  margin-top: 5vh;
+  margin-bottom: 7vh;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: baseline;
+  gap: 10px;
 `;
 const Title = styled.h1`
   color: ${(props) => props.theme.accentColor};
@@ -44,6 +53,33 @@ const Img = styled.img`
   height: 35px;
 `;
 // coin
+const PriceSummary = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+`;
+const Rank = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  justify-content: center;
+  border-radius: 10px;
+`;
+const CurrentPrice = styled.div<{ $isPositive: boolean }>`
+  text-align: right;
+  color: ${(props) => (props.$isPositive ? "#E91E63" : "#2E93fA")};
+  div:first-child {
+    font-size: 30px;
+    font-weight: 600;
+  }
+`;
+const PriceChanges = styled.div`
+  justify-content: right;
+  align-items: baseline;
+  display: flex;
+  gap: 5px;
+`;
 const Overview = styled.div`
   display: flex;
   justify-content: space-between;
@@ -55,15 +91,23 @@ const OverviewItem = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  span:first-child {
-    font-size: 10px;
-    font-weight: 400;
-    text-transform: uppercase;
-    margin-bottom: 5px;
-  }
 `;
-const Description = styled.p`
-  margin: 20px 0px;
+const Description = styled.div`
+  padding: 10px 20px;
+  border-radius: 10px;
+  background-color: ${(props) => props.theme.listColor};
+  margin: 20px 0;
+`;
+const Subtitle = styled.h1`
+  font-size: 12px;
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-bottom: 5px;
+`;
+const Symbol = styled.span`
+  font-size: 13px;
+  font-weight: 400;
+  color: gray;
 `;
 const Tabs = styled.div`
   display: grid;
@@ -134,6 +178,13 @@ interface InfoData {
   hash_algorithm: string;
   first_data_at: string;
   last_data_at: string;
+  links: {
+    facebook: string;
+    reddit: string;
+    source_code: string;
+    website: string;
+    youtube: string;
+  };
 }
 
 interface PriceData {
@@ -198,7 +249,6 @@ function Coin() {
     // fetch interval 설정 (milliseconds 단위)
     // background에서 주기적으로 앱을 업데이트, 데이터 실시간 반영
   );
-
   // reactQuery 대신 useEffect+useState hoock 사용하는 방법
   // const [loading, setLoading] = useState<boolean>(true);
   // const [info, setInfo] = useState<InfoData>();
@@ -218,6 +268,21 @@ function Coin() {
   // }, [coinId]);
 
   const loading = tickersLoading || infoLoading;
+  let rankFormat = "";
+  switch (infoData?.rank) {
+    case 1:
+      rankFormat = "st";
+      break;
+    case 2:
+      rankFormat = "nd";
+      break;
+    case 3:
+      rankFormat = "rd";
+      break;
+    default:
+      rankFormat = "th";
+  }
+  const isPositive = Number(tickersData?.quotes.USD.percent_change_24h) > 0;
   return (
     <Container>
       <Helmet>
@@ -233,51 +298,33 @@ function Coin() {
         </Btn>
       </Nav>
       <Header>
+        <Img
+          src={`https://coinicons-api.vercel.app/api/icon/${infoData?.symbol.toLowerCase()}`}
+          alt={`${infoData?.name}'s image`}
+        />
         <Title>
           {state?.name ? state.name : loading ? "Loading..." : infoData?.name}
         </Title>
+        <Symbol>{infoData?.symbol}</Symbol>
       </Header>
       {loading ? (
         <Loader>Loading...</Loader>
       ) : (
         <>
-          <Overview>
-            <OverviewItem>
-              <span>Rank:</span>
-              <span>{infoData?.rank}</span>
-            </OverviewItem>
-            <OverviewItem>
-              <span>Symbol:</span>
-              <span>{infoData?.symbol}</span>
-            </OverviewItem>
-            <OverviewItem>
-              <span>Price(USD):</span>
-              <span>{tickersData?.quotes.USD.price.toFixed(3)}</span>
-            </OverviewItem>
-          </Overview>
-          <Description>{infoData?.description}</Description>
-          <Overview>
-            <OverviewItem>
-              <span>Total Suply:</span>
-              <span>{tickersData?.total_supply}</span>
-            </OverviewItem>
-            <OverviewItem>
-              <span>Max Supply:</span>
-              <span>{tickersData?.max_supply}</span>
-            </OverviewItem>
-          </Overview>
-
-          <Tabs>
-            <Tab $isActive={chartMatch !== null ? true : false}>
-              <Link to={`/${coinId}/chart`}>LineChart</Link>
-            </Tab>
-            <Tab $isActive={candleMatch !== null ? true : false}>
-              <Link to={`/${coinId}/candle-stick`}>CandleStick</Link>
-            </Tab>
-            <Tab $isActive={priceMatch !== null ? true : false}>
-              <Link to={`/${coinId}/price`}>Price</Link>
-            </Tab>
-          </Tabs>
+          <PriceSummary>
+            <Rank>
+              <Title>{infoData?.rank}</Title>
+              <Subtitle>{rankFormat}</Subtitle>
+            </Rank>
+            <CurrentPrice $isPositive={isPositive}>
+              <div>${tickersData?.quotes.USD.price.toFixed(2)}</div>
+              <PriceChanges>
+                {isPositive ? <span>&#9652;</span> : <span>&#9662;</span>}
+                <span>{tickersData?.quotes.USD.percent_change_24h}%</span>
+                <Symbol>(1day)</Symbol>
+              </PriceChanges>
+            </CurrentPrice>
+          </PriceSummary>
 
           {/* nested router : 중첩 된 route */}
           <Switch>
@@ -291,6 +338,80 @@ function Coin() {
               <CandleStick coinId={coinId} />
             </Route>
           </Switch>
+          <Tabs>
+            <Tab $isActive={chartMatch !== null ? true : false}>
+              <Link to={`/${coinId}/chart`}>LineChart</Link>
+            </Tab>
+            <Tab $isActive={candleMatch !== null ? true : false}>
+              <Link to={`/${coinId}/candle-stick`}>CandleStick</Link>
+            </Tab>
+            <Tab $isActive={priceMatch !== null ? true : false}>
+              <Link to={`/${coinId}/price`}>Price</Link>
+            </Tab>
+          </Tabs>
+          <Overview>
+            <OverviewItem>
+              <Subtitle>Total Suply:</Subtitle>
+              <span>{tickersData?.total_supply}</span>
+            </OverviewItem>
+            <OverviewItem>
+              <Subtitle>Max Supply:</Subtitle>
+              <span>{tickersData?.max_supply}</span>
+            </OverviewItem>
+          </Overview>
+          <Description>
+            <Subtitle>description</Subtitle>
+            <p>{infoData?.description}</p>
+          </Description>
+          <Overview>
+            <Subtitle>Links</Subtitle>
+
+            {infoData?.links.website ? (
+              <OverviewItem>
+                <a href={infoData.links.website}>
+                  <Img src={home} alt="website" title="website" />
+                </a>
+              </OverviewItem>
+            ) : (
+              ""
+            )}
+            {infoData?.links.source_code ? (
+              <OverviewItem>
+                <a href={infoData.links.source_code}>
+                  <Img src={github} alt="github" title="github" />
+                </a>
+              </OverviewItem>
+            ) : (
+              ""
+            )}
+            {infoData?.links.facebook ? (
+              <OverviewItem>
+                <a href={infoData.links.facebook}>
+                  <Img src={facebook} alt="facebook" title="facebook" />
+                </a>
+              </OverviewItem>
+            ) : (
+              ""
+            )}
+            {infoData?.links.reddit ? (
+              <OverviewItem>
+                <a href={infoData.links.reddit}>
+                  <Img src={reddit} alt="reddit" title="reddit" />
+                </a>
+              </OverviewItem>
+            ) : (
+              ""
+            )}
+            {infoData?.links.youtube ? (
+              <OverviewItem>
+                <a href={infoData.links.youtube}>
+                  <Img src={youtube} alt="youtube" title="youtube" />
+                </a>
+              </OverviewItem>
+            ) : (
+              ""
+            )}
+          </Overview>
         </>
       )}
       <Footer />

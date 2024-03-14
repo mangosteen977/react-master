@@ -24,6 +24,10 @@ const ThemeBtn = styled.div`
     width: 100%;
     object-fit: cover;
   }
+  &:hover {
+    width: 40px;
+    height: 40px;
+  }
 `;
 
 function Footer() {
