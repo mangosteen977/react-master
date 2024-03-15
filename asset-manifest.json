@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.js": "/react-master/react-typescript/static/js/main.6fa05229.js",
+    "main.js": "/react-master/react-typescript/static/js/main.7439d548.js",
     "static/media/reddit.svg": "/react-master/react-typescript/static/media/reddit.eb68ea9df75c324843cbd140adf3ec34.svg",
     "static/media/github.svg": "/react-master/react-typescript/static/media/github.fcd21c372f80acf8608d6e47c3f2d2e0.svg",
     "index.html": "/react-master/react-typescript/index.html",
@@ -14,9 +14,9 @@
     "static/media/up.svg": "/react-master/react-typescript/static/media/up.d024fd4e3b6505311dfcb678c82969ff.svg",
     "static/media/down.svg": "/react-master/react-typescript/static/media/down.1e8ac18151fef9ce326610c1cc320bfb.svg",
     "static/media/back.svg": "/react-master/react-typescript/static/media/back.f07da64561049e15c3915eaca2dcccab.svg",
-    "main.6fa05229.js.map": "/react-master/react-typescript/static/js/main.6fa05229.js.map"
+    "main.7439d548.js.map": "/react-master/react-typescript/static/js/main.7439d548.js.map"
   },
   "entrypoints": [
-    "static/js/main.6fa05229.js"
+    "static/js/main.7439d548.js"
   ]
 }
