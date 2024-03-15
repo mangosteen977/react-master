@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.js": "/react-master/react-typescript/static/js/main.49110053.js",
+    "static/media/reddit.svg": "/react-master/react-typescript/static/media/reddit.eb68ea9df75c324843cbd140adf3ec34.svg",
+    "static/media/github.svg": "/react-master/react-typescript/static/media/github.fcd21c372f80acf8608d6e47c3f2d2e0.svg",
+    "index.html": "/react-master/react-typescript/index.html",
+    "static/media/facebook.svg": "/react-master/react-typescript/static/media/facebook.6cddaea6c74ed7d359d02f669345d857.svg",
+    "static/media/light_fill0.svg": "/react-master/react-typescript/static/media/light_fill0.8ec01fd730f29f3403c1431ccf0d6bc1.svg",
+    "static/media/youtube.svg": "/react-master/react-typescript/static/media/youtube.2000d3069188b908c9e3ae9a6bf436ff.svg",
+    "static/media/night_fill0.svg": "/react-master/react-typescript/static/media/night_fill0.1f7fa6a023998a9254f7321011ee0c1f.svg",
+    "static/media/light_fill1.svg": "/react-master/react-typescript/static/media/light_fill1.81e4bdc78b4e2e16266c31d480736806.svg",
+    "static/media/night_fill1.svg": "/react-master/react-typescript/static/media/night_fill1.b7c67d098b248c4290c0f4580f44a646.svg",
+    "static/media/home.svg": "/react-master/react-typescript/static/media/home.90f5143ac64a9372c7444cd552071b1c.svg",
+    "static/media/up.svg": "/react-master/react-typescript/static/media/up.d024fd4e3b6505311dfcb678c82969ff.svg",
+    "static/media/down.svg": "/react-master/react-typescript/static/media/down.1e8ac18151fef9ce326610c1cc320bfb.svg",
+    "static/media/back.svg": "/react-master/react-typescript/static/media/back.f07da64561049e15c3915eaca2dcccab.svg",
+    "main.49110053.js.map": "/react-master/react-typescript/static/js/main.49110053.js.map"
+  },
+  "entrypoints": [
+    "static/js/main.49110053.js"
+  ]
+}
