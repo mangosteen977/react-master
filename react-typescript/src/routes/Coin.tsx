@@ -246,7 +246,7 @@ function Coin() {
     ["tickers", "coinId"],
     () => fetchCoinTickers(coinId),
     {
-      // refetchInterval: 5000, // 5000ms(5s)
+      refetchInterval: 5000, // 5000ms(5s)
     }
     // fetch interval 설정 (milliseconds 단위)
     // background에서 주기적으로 앱을 업데이트, 데이터 실시간 반영
