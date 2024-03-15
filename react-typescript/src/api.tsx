@@ -1,4 +1,5 @@
 const BASE_URL = `https://api.coinpaprika.com/v1`;
+// const BASE_URL = `https://proxy.cors.sh/https://api.coinpaprika.com/v1`;
 const NOMAD_URL = `https://ohlcv-api.nomadcoders.workers.dev`;
 
 export async function fetchCoins() {

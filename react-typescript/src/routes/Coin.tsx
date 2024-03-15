@@ -58,6 +58,7 @@ const PriceSummary = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 0 20px;
+  margin-bottom: 20px;
 `;
 const Rank = styled.div`
   display: flex;
@@ -163,6 +164,7 @@ interface InfoData {
   id: string;
   name: string;
   symbol: string;
+  logo: string;
   rank: number;
   is_new: boolean;
   is_active: boolean;
@@ -292,14 +294,18 @@ function Coin() {
       </Helmet>
       <Nav>
         <Btn>
-          <Link to="/">
+          <Link to={`${process.env.PUBLIC_URL}/`}>
             <Img src={backSvg} alt="back button" />
           </Link>
         </Btn>
       </Nav>
       <Header>
         <Img
-          src={`https://coinicons-api.vercel.app/api/icon/${infoData?.symbol.toLowerCase()}`}
+          // src={`https://coinicons-api.vercel.app/api/icon/${infoData?.symbol.toLowerCase()}`}
+          src={
+            infoData?.logo ??
+            `https://coinicons-api.vercel.app/api/icon/${infoData?.symbol.toLowerCase()}`
+          }
           alt={`${infoData?.name}'s image`}
         />
         <Title>
@@ -328,25 +334,43 @@ function Coin() {
 
           {/* nested router : 중첩 된 route */}
           <Switch>
-            <Route path={"/:coinId/price"}>
-              <Price />
+            <Route path={`${process.env.PUBLIC_URL}/:coinId/price`}>
+              <Price
+                percent_change_1y={tickersData?.quotes.USD.percent_change_1y}
+                percent_change_30d={tickersData?.quotes.USD.percent_change_30d}
+                percent_change_7d={tickersData?.quotes.USD.percent_change_7d}
+                percent_change_24h={tickersData?.quotes.USD.percent_change_24h}
+                percent_change_12h={tickersData?.quotes.USD.percent_change_12h}
+                percent_change_6h={tickersData?.quotes.USD.percent_change_6h}
+                percent_change_1h={tickersData?.quotes.USD.percent_change_1h}
+                volume_24h={tickersData?.quotes.USD.volume_24h}
+                volume_24h_change_24h={
+                  tickersData?.quotes.USD.volume_24h_change_24h
+                }
+              />
             </Route>
-            <Route path={"/:coinId/chart"}>
+            <Route path={`${process.env.PUBLIC_URL}/:coinId/chart`}>
               <Chart coinId={coinId} />
             </Route>
-            <Route path={"/:coinId/candle-stick"}>
+            <Route path={`${process.env.PUBLIC_URL}/:coinId/candle-stick`}>
               <CandleStick coinId={coinId} />
             </Route>
           </Switch>
           <Tabs>
             <Tab $isActive={chartMatch !== null ? true : false}>
-              <Link to={`/${coinId}/chart`}>LineChart</Link>
+              <Link to={`${process.env.PUBLIC_URL}/${coinId}/chart`}>
+                LineChart
+              </Link>
             </Tab>
             <Tab $isActive={candleMatch !== null ? true : false}>
-              <Link to={`/${coinId}/candle-stick`}>CandleStick</Link>
+              <Link to={`${process.env.PUBLIC_URL}/${coinId}/candle-stick`}>
+                CandleStick
+              </Link>
             </Tab>
             <Tab $isActive={priceMatch !== null ? true : false}>
-              <Link to={`/${coinId}/price`}>Price</Link>
+              <Link to={`${process.env.PUBLIC_URL}/${coinId}/price`}>
+                Price
+              </Link>
             </Tab>
           </Tabs>
           <Overview>

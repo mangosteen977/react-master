@@ -47,6 +47,7 @@ const Coin = styled.li`
 const Img = styled.img`
   width: 35px;
   height: 35px;
+  border-radius: 35px;
 `;
 // interface of json data
 interface CoinInterface {
@@ -100,13 +101,14 @@ function Coins() {
             <Coin key={coin.id}>
               <Link
                 to={{
-                  pathname: `/${coin.id}`,
+                  pathname: `${process.env.PUBLIC_URL}/${coin.id}`,
                   state: { name: coin.name },
                 }}
               >
                 {/* Link to ={{object 형태로 전달}}, pathname/search/hash/state */}
                 <Img
-                  src={`https://coinicons-api.vercel.app/api/icon/${coin.symbol.toLowerCase()}`}
+                  // src={`https://cryptoicon-api.pages.dev/api/icon/${coin.symbol.toLowerCase()}`}
+                  src={`https://cryptocurrencyliveprices.com/img/${coin.id}.png`}
                   alt={`${coin.name}'s image`}
                 />
                 {coin.name} &rarr;
