@@ -42,6 +42,7 @@ interface IForm {
   userName: string;
   password: string;
   password1: string;
+  extraError?: string;
 }
 function ToDoList() {
   const {
@@ -49,6 +50,7 @@ function ToDoList() {
     watch,
     handleSubmit,
     formState: { errors },
+    setError, // setError : 에러를 발생 시킴
   } = useForm<IForm>({
     defaultValues: {
       // 프로퍼티 기본 값 설정
@@ -57,8 +59,17 @@ function ToDoList() {
   });
   // register() : onChange, onBlur(입력 커서 focus가 input에 있지 않은 상태)이벤트 반환
   // watch() : form의 입력값 변화를 관찰
-  const onValid = (data: any) => {
-    console.log(data);
+  const onValid = (data: IForm) => {
+    // custom validation, error 발생 시키기
+    if (data.password !== data.password1) {
+      setError(
+        "password1",
+        { message: "Password are not the same" },
+        { shouldFocus: true } // 해당 에러 위치로 focus이동시킴
+      );
+    }
+    // 입력값에 문제가 없는데 그 외 문제가 생길 경우.. 이런식으로 입력값 외에 에러를 발생시킬 수도 있음.
+    setError("extraError", { message: "Server offline" });
   };
   // handleSubmit() : onSubmit 대체, validation, preventDefault
   // handleSubmit은 onValid()함수 필요
@@ -91,7 +102,7 @@ function ToDoList() {
             입력되지 않은 값의 input에 focus동작.
             
         */}
-        <span style={{ color: "red" }}>{errors.email?.message}</span>
+        <span style={{ color: "red" }}>{errors?.email?.message}</span>
         <input
           {...register("firstName", {
             required: "First name is required",
@@ -99,33 +110,41 @@ function ToDoList() {
               value: 2,
               message: "your first name is way too short",
             },
+            validate: (value) =>
+              value.includes("subin") ? "no subin is allowed" : true,
+            // firstName 값에 subin이 포함되지 않을 경우만 validation true 확인.
+            // validate:"string" 바로 string을 return하면 errors.message로 동작
+            // 여러 개의 조건일 경우 {}로 설정.아래 userName 참고
           })}
           placeholder="firstName"
         />
         {/* RegisterOptions에 대해 메세지 설정 가능,
         각종 조건에 대한 내용은 Ctrl + required클릭 (validator.d.ts) */}
-        <span style={{ color: "red" }}>{errors.firstName?.message}</span>
+        <span style={{ color: "red" }}>{errors?.firstName?.message}</span>
         <input
           {...register("lastName", { required: "Write here" })}
           placeholder="lastName"
         />
-        <span style={{ color: "red" }}>{errors.lastName?.message}</span>
+        <span style={{ color: "red" }}>{errors?.lastName?.message}</span>
         <input
           {...register("userName", {
             required: "Write here",
-            minLength: {
-              value: 2,
-              message: "your first name is way too short",
+            validate: {
+              // validate 여러 개의 조건일 경우. 오브젝트 형태로 쓸 수 있다.
+              noSubin: (value) =>
+                value.includes("subin") ? "no subin is allowed" : true,
+              noNico: (value) =>
+                value.includes("nico") ? "no nico is allowed" : true,
             },
           })}
           placeholder="userName"
         />
-        <span style={{ color: "red" }}>{errors.userName?.message}</span>
+        <span style={{ color: "red" }}>{errors?.userName?.message}</span>
         <input
           {...register("password", { required: "Write here" })}
           placeholder="password"
         />
-        <span style={{ color: "red" }}>{errors.password?.message}</span>
+        <span style={{ color: "red" }}>{errors?.password?.message}</span>
         <input
           {...register("password1", {
             required: "Write here",
@@ -136,12 +155,13 @@ function ToDoList() {
           })}
           placeholder="password1"
         />
-        <span style={{ color: "red" }}>{errors.password1?.message}</span>
+        <span style={{ color: "red" }}>{errors?.password1?.message}</span>
         {/* {...register("toDo")} 
             register()가 반환하는 객체들을 input의 props로 펼쳐서 줌.
             "Email"는 name
         */}
         <button>Add</button>
+        <span>{errors?.extraError?.message}</span>
       </form>
     </div>
   );
