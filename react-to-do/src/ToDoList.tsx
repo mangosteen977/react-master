@@ -1,41 +1,31 @@
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 
-/* 기존의 useState를 이용해 form+input 사용
+interface IForm {
+  toDo: string;
+}
 function ToDoList() {
-  const [toDo, setToDo] = useState("");
-  const [toDoError, setToDoError] = useState("");
-  const onChange = (event: React.FormEvent<HTMLInputElement>) => {
-    const {
-      currentTarget: { value },
-    } = event;
-    setToDo(value);
-    setToDoError("");
-  };
-  const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    if (toDo.length < 10) {
-      return setToDoError("To do should be longer");
-    }
-    console.log("submit");
+  const { register, handleSubmit, setValue } = useForm<IForm>();
+  const handleValid = (data: IForm) => {
+    console.log("add to do", data.toDo);
+    setValue("toDo", "");
   };
   return (
     <div>
-      <form onSubmit={onSubmit}>
+      <form onSubmit={handleSubmit(handleValid)}>
         <input
-          value={toDo}
-          onChange={onChange}
+          {...register("toDo", {
+            required: "Please write a To Do",
+          })}
           type="text"
           placeholder="Write a to do"
         />
         <button>Add</button>
-        {toDoError !== "" ? toDoError : null}
       </form>
     </div>
   );
 }
-*/
-interface IForm {
+
+/* interface IForm {
   email: string;
   firstName: string;
   lastName: string;
@@ -97,11 +87,6 @@ function ToDoList() {
           })}
           placeholder="Email"
         />
-        {/* HTML코드 required 등 대신 react-hook-form의 RegisterOptions으로 { required: true }등 사용. 
-            RegisterOptions이 입력되지 않았을 경우, form입력값이 onValid로 넘어가지 않음,
-            입력되지 않은 값의 input에 focus동작.
-            
-        */}
         <span style={{ color: "red" }}>{errors?.email?.message}</span>
         <input
           {...register("firstName", {
@@ -118,8 +103,6 @@ function ToDoList() {
           })}
           placeholder="firstName"
         />
-        {/* RegisterOptions에 대해 메세지 설정 가능,
-        각종 조건에 대한 내용은 Ctrl + required클릭 (validator.d.ts) */}
         <span style={{ color: "red" }}>{errors?.firstName?.message}</span>
         <input
           {...register("lastName", { required: "Write here" })}
@@ -156,14 +139,11 @@ function ToDoList() {
           placeholder="password1"
         />
         <span style={{ color: "red" }}>{errors?.password1?.message}</span>
-        {/* {...register("toDo")} 
-            register()가 반환하는 객체들을 input의 props로 펼쳐서 줌.
-            "Email"는 name
-        */}
         <button>Add</button>
         <span>{errors?.extraError?.message}</span>
       </form>
     </div>
   );
 }
+*/
 export default ToDoList;
