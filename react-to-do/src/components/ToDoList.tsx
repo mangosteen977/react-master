@@ -1,5 +1,5 @@
 import { useRecoilValue } from "recoil";
-import { toDoStateAtom } from "../atom";
+import { toDoSelector, toDoStateAtom } from "../atom";
 import CreateToDo from "./CreateToDo";
 import ToDo from "./ToDo";
 
@@ -7,14 +7,32 @@ function ToDoList() {
   // const [toDos, setToDos] = useRecoilState(toDoStateAtom); // atom 읽고 쓰기
   const toDos = useRecoilValue(toDoStateAtom); // atom 읽기
   // const modFn = useSetRecoilState(toDoState); // atom 쓰기(SetterOrUpdater)
+  const [todo, doing, done] = useRecoilValue(toDoSelector);
 
   return (
     <div>
       <h1>To Do</h1>
       {/* to do create form */}
       <CreateToDo />
+      <h2>To Do</h2>
       <ul>
-        {toDos.map((toDo) => (
+        {todo.map((toDo) => (
+          // text, id, category {} props로 펼쳐서 전달
+          <ToDo key={toDo.id} {...toDo} />
+        ))}
+      </ul>
+      <hr />
+      <h2>Doing</h2>
+      <ul>
+        {doing.map((toDo) => (
+          // text, id, category {} props로 펼쳐서 전달
+          <ToDo key={toDo.id} {...toDo} />
+        ))}
+      </ul>
+      <hr />
+      <h2>Done</h2>
+      <ul>
+        {done.map((toDo) => (
           // text, id, category {} props로 펼쳐서 전달
           <ToDo key={toDo.id} {...toDo} />
         ))}
