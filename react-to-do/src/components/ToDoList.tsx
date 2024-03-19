@@ -1,42 +1,35 @@
-import { useRecoilValue } from "recoil";
-import { toDoSelector, toDoStateAtom } from "../atom";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { categoryStateAtom, toDoSelector, Categories } from "../atom";
 import CreateToDo from "./CreateToDo";
 import ToDo from "./ToDo";
 
 function ToDoList() {
   // const [toDos, setToDos] = useRecoilState(toDoStateAtom); // atom 읽고 쓰기
-  const toDos = useRecoilValue(toDoStateAtom); // atom 읽기
+  // const toDos = useRecoilValue(toDoStateAtom); // atom 읽기
   // const modFn = useSetRecoilState(toDoState); // atom 쓰기(SetterOrUpdater)
-  const [todo, doing, done] = useRecoilValue(toDoSelector);
-
+  const toDos = useRecoilValue(toDoSelector);
+  const [category, setCategory] = useRecoilState(categoryStateAtom);
+  const onInput = (event: React.FormEvent<HTMLSelectElement>) => {
+    /*
+    oninput : 이벤트는 요소의 값이 변경된 직후 발생.
+    onchange : 내용이 변경된 후 요소가 포커스를 잃었을 때 발생.
+    */
+    setCategory(event.currentTarget.value as any);
+  };
   return (
     <div>
       <h1>To Do</h1>
+      <hr />
+      <select onInput={onInput} value={category}>
+        <option value={Categories.TO_DO}>To Do</option>
+        <option value={Categories.DOING}>Doing</option>
+        <option value={Categories.DONE}>Done</option>
+      </select>
       {/* to do create form */}
       <CreateToDo />
-      <h2>To Do</h2>
-      <ul>
-        {todo.map((toDo) => (
-          // text, id, category {} props로 펼쳐서 전달
-          <ToDo key={toDo.id} {...toDo} />
-        ))}
-      </ul>
-      <hr />
-      <h2>Doing</h2>
-      <ul>
-        {doing.map((toDo) => (
-          // text, id, category {} props로 펼쳐서 전달
-          <ToDo key={toDo.id} {...toDo} />
-        ))}
-      </ul>
-      <hr />
-      <h2>Done</h2>
-      <ul>
-        {done.map((toDo) => (
-          // text, id, category {} props로 펼쳐서 전달
-          <ToDo key={toDo.id} {...toDo} />
-        ))}
-      </ul>
+      {toDos?.map((toDo) => (
+        <ToDo key={toDo.id} {...toDo} />
+      ))}
     </div>
   );
 }

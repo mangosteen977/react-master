@@ -1,5 +1,5 @@
 import { useSetRecoilState } from "recoil";
-import { IToDO, toDoStateAtom } from "../atom";
+import { IToDO, toDoStateAtom, Categories } from "../atom";
 
 function ToDo({ text, category, id }: IToDO) {
   // TS) interface의 property type 항목 하나만 설정 하기. Iinterface["property"]
@@ -27,18 +27,18 @@ function ToDo({ text, category, id }: IToDO) {
   return (
     <li>
       {text}
-      {category !== "TO_DO" && (
-        <button name="TO_DO" onClick={onClick}>
+      {category !== Categories.TO_DO && (
+        <button name={Categories.TO_DO} onClick={onClick}>
           To Do
         </button>
       )}
-      {category !== "DOING" && (
-        <button name="DOING" onClick={onClick}>
+      {category !== Categories.DOING && (
+        <button name={Categories.DOING} onClick={onClick}>
           Doing
         </button>
       )}
-      {category !== "DONE" && (
-        <button name="DONE" onClick={onClick}>
+      {category !== Categories.DONE && (
+        <button name={Categories.DONE} onClick={onClick}>
           Done
         </button>
       )}
