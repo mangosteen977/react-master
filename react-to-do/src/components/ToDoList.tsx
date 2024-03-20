@@ -1,5 +1,10 @@
 import { useRecoilState, useRecoilValue } from "recoil";
-import { categoryStateAtom, toDoSelector, Categories } from "../atom";
+import {
+  categoryStateAtom,
+  toDoSelector,
+  // Categories,
+  AllCategoryAtom,
+} from "../atom";
 import CreateToDo from "./CreateToDo";
 import ToDo from "./ToDo";
 
@@ -8,23 +13,43 @@ function ToDoList() {
   // const toDos = useRecoilValue(toDoStateAtom); // atom 읽기
   // const modFn = useSetRecoilState(toDoState); // atom 쓰기(SetterOrUpdater)
   const toDos = useRecoilValue(toDoSelector);
+  const [allCategory, setallCategory] = useRecoilState(AllCategoryAtom);
   const [category, setCategory] = useRecoilState(categoryStateAtom);
-  const onInput = (event: React.FormEvent<HTMLSelectElement>) => {
-    /*
-    oninput : 이벤트는 요소의 값이 변경된 직후 발생.
-    onchange : 내용이 변경된 후 요소가 포커스를 잃었을 때 발생.
-    */
-    setCategory(event.currentTarget.value as any);
+  // const onInput = (event: React.FormEvent<HTMLSelectElement>) => {
+  //   /*
+  //   oninput : 이벤트는 요소의 값이 변경된 직후 발생.
+  //   onchange : 내용이 변경된 후 요소가 포커스를 잃었을 때 발생.
+  //   */
+  //   setCategory(event.currentTarget.value as any);
+  // };
+  const onclick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const {
+      currentTarget: { name },
+    } = event;
+    setCategory(name);
+  };
+  console.log(category, "category");
+  const newCategory = () => {
+    const newCate = prompt("추가 할 폴더 이름을 입력하세요.");
+    newCate && setallCategory((old) => [...old, newCate]);
   };
   return (
     <div>
       <h1>To Do</h1>
       <hr />
-      <select onInput={onInput} value={category}>
+      {/* <select onInput={onInput} value={category}>
         <option value={Categories.TO_DO}>To Do</option>
         <option value={Categories.DOING}>Doing</option>
         <option value={Categories.DONE}>Done</option>
-      </select>
+      </select> */}
+      <div>
+        {allCategory.map((cate, i) => (
+          <button key={i} onClick={onclick} name={cate}>
+            {cate.replace("_", " ")}
+          </button>
+        ))}
+        <button onClick={newCategory}>+폴더</button>
+      </div>
       {/* to do create form */}
       <CreateToDo />
       {toDos?.map((toDo) => (

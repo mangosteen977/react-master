@@ -1,10 +1,16 @@
-import { useSetRecoilState } from "recoil";
-import { IToDO, toDoStateAtom, Categories } from "../atom";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import {
+  IToDO,
+  toDoStateAtom,
+  //Categories,
+  AllCategoryAtom,
+} from "../atom";
 
 function ToDo({ text, category, id }: IToDO) {
   // TS) interface의 property type 항목 하나만 설정 하기. Iinterface["property"]
   // ex) newCategory: IToDO["category"]
   const setToDos = useSetRecoilState(toDoStateAtom);
+  const allCategory = useRecoilValue(AllCategoryAtom);
   const onClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     const {
       // 선택 된 category(변경할 category)
@@ -23,26 +29,37 @@ function ToDo({ text, category, id }: IToDO) {
       ];
     });
   };
-
+  const delToDo = () => {
+    setToDos((oldToDos) => oldToDos.filter((toDo) => toDo.id != id));
+  };
   return (
     <li>
       {text}
-      {category !== Categories.TO_DO && (
-        <button name={Categories.TO_DO} onClick={onClick}>
-          To Do
-        </button>
+      {allCategory.map(
+        (cate) =>
+          cate !== category && (
+            <button name={cate} onClick={onClick}>
+              {cate}
+            </button>
+          )
       )}
-      {category !== Categories.DOING && (
-        <button name={Categories.DOING} onClick={onClick}>
-          Doing
-        </button>
-      )}
-      {category !== Categories.DONE && (
-        <button name={Categories.DONE} onClick={onClick}>
-          Done
-        </button>
-      )}
+      <button onClick={delToDo}>Del</button>
     </li>
   );
 }
 export default ToDo;
+/* {category !== Categories.TO_DO && (
+    <button name={Categories.TO_DO} onClick={onClick}>
+      To Do
+    </button>
+  )}
+  {category !== Categories.DOING && (
+    <button name={Categories.DOING} onClick={onClick}>
+      Doing
+    </button>
+  )}
+  {category !== Categories.DONE && (
+    <button name={Categories.DONE} onClick={onClick}>
+      Done
+    </button>
+  )} */
