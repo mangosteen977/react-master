@@ -5,7 +5,47 @@ import {
   //Categories,
   AllCategoryAtom,
 } from "../atom";
+import styled from "styled-components";
 
+const ToDoListItem = styled.li`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 50px;
+  padding: 0 20px;
+  border-bottom: 3px dashed #fbf8db;
+  &:nth-of-type(1) {
+    border-top: 3px dashed #fbf8db;
+  }
+  div {
+    display: none;
+    button:last-child {
+      background-color: #ff5100;
+    }
+  }
+  &:hover {
+    background-color: #fbf8db;
+    div {
+      display: block;
+    }
+  }
+`;
+const Button = styled.button`
+  border: none;
+  background-color: #fbc531;
+  width: 50px;
+  height: 25px;
+  border-radius: 5px;
+  color: #fff;
+  font-weight: 300;
+  font-size: 10px;
+  overflow: hidden;
+  margin-left: 5px;
+  cursor: pointer;
+  &:hover {
+    background-color: #faab0d;
+  }
+`;
 function ToDo({ text, category, id }: IToDO) {
   // TS) interface의 property type 항목 하나만 설정 하기. Iinterface["property"]
   // ex) newCategory: IToDO["category"]
@@ -33,18 +73,20 @@ function ToDo({ text, category, id }: IToDO) {
     setToDos((oldToDos) => oldToDos.filter((toDo) => toDo.id != id));
   };
   return (
-    <li>
+    <ToDoListItem>
       {text}
-      {allCategory.map(
-        (cate) =>
-          cate !== category && (
-            <button name={cate} onClick={onClick}>
-              {cate}
-            </button>
-          )
-      )}
-      <button onClick={delToDo}>Del</button>
-    </li>
+      <div>
+        {allCategory.map(
+          (cate) =>
+            cate !== category && (
+              <Button name={cate} onClick={onClick}>
+                {cate}
+              </Button>
+            )
+        )}
+        <Button onClick={delToDo}>Del</Button>
+      </div>
+    </ToDoListItem>
   );
 }
 export default ToDo;
