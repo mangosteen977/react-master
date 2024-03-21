@@ -13,31 +13,63 @@ const Box = styled(motion.div)`
   /* styled(motion.elements) : styled-components에 motion.elements를 적용 */
   width: 200px;
   height: 200px;
-  background-color: white;
-  border-radius: 10px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
 `;
 
+const Circle = styled(motion.div)`
+  background-color: white;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
+  height: 80px;
+  width: 80px;
+  place-self: center;
+  /* place-self : gird, flexbox 하위 요소, align-self 속성과 justify-self 속성 값을 한번에 작성 */
+  border-radius: 40px;
+`;
+const boxVariants = {
+  start: {
+    opacity: 0,
+    scale: 0.5,
+  },
+  end: {
+    opacity: 1,
+    scale: 1,
+    transition: {
+      type: "spring",
+      duration: 0.5,
+      bounce: 0.5,
+      // delayChildren: 0.5, // 자식 요소 딜레이
+      staggerChildren: 0.2, // 자동으로 자식 요소 순차적 딜레이
+    },
+  },
+};
+
+const circleVariants = {
+  start: {
+    opacity: 0,
+    y: 10, // Motion에만 있는 속성. x, y 위치
+  },
+  end: {
+    opacity: 1,
+    y: 0,
+  },
+};
 function App() {
-  const myVariants = {
-    start: { scale: 0 }, //initial
-    end: { scale: 1, rotateZ: 360, transition: { type: "spring", delay: 0.5 } }, //animate
-  };
   return (
     <Wrapper>
-      {/*  <motion.div></motion.div>
-        animation을 적용하고자 하는 element는 motion.element 형태로 써야 함.
-        styled-components에서 쓸 수도 있음. */}
       {/* motion: https://www.framer.com/motion/
           animation :  https://www.framer.com/docs/animation */}
-      {/* animation */}
-      <Box
-        transition={{ type: "spring", delay: 0.5 }}
-        initial={{ scale: 0 }}
-        animate={{ scale: 1, rotateZ: 360 }}
-      />
-      {/* Variants : 오브젝트 내 프로퍼티명으로 나누어서 props를 줄 수 있음. */}
-      <Box variants={myVariants} initial="start" animate="end" />
+      <Box variants={boxVariants} initial="start" animate="end">
+        {/* 부모 객체가 variants/initial/animate props를 가질 때,
+        Motion이 initial/animate를 하위 자식 객체 에 자동으로 부여(상속) */}
+        <Circle variants={circleVariants} />
+        <Circle variants={circleVariants} />
+        <Circle variants={circleVariants} />
+        <Circle variants={circleVariants} />
+      </Box>
     </Wrapper>
   );
 }
