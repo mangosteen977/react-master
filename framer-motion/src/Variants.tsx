@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import { motion } from "framer-motion";
-import Variants from "./Variants";
 
 const Wrapper = styled.div`
   height: 100vh;
@@ -58,15 +57,21 @@ const circleVariants = {
     y: 0,
   },
 };
-function App() {
+function Variants() {
   return (
     <Wrapper>
       {/* motion: https://www.framer.com/motion/
           animation :  https://www.framer.com/docs/animation */}
-      <Box></Box>
-      <Variants />
+      <Box variants={boxVariants} initial="start" animate="end">
+        {/* 부모 객체가 variants/initial/animate props를 가질 때,
+        Motion이 initial/animate를 하위 자식 객체 에 자동으로 부여(상속) */}
+        <Circle variants={circleVariants} />
+        <Circle variants={circleVariants} />
+        <Circle variants={circleVariants} />
+        <Circle variants={circleVariants} />
+      </Box>
     </Wrapper>
   );
 }
 
-export default App;
+export default Variants;
