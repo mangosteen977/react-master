@@ -1,4 +1,9 @@
-import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import {
+  DragDropContext,
+  Draggable,
+  DropResult,
+  Droppable,
+} from "react-beautiful-dnd";
 import styled from "styled-components";
 import { useRecoilState } from "recoil";
 import { toDoStateAtom } from "./atom";
@@ -37,9 +42,32 @@ const Card = styled.div`
 
 function App() {
   const [toDos, setToDo] = useRecoilState(toDoStateAtom);
-  const onDragEnd = () => {
-    // drag => drop 후 동작
-    console.log("dragging finish");
+  const onDragEnd = ({ destination, source, draggableId }: DropResult) => {
+    if (!destination) return;
+    setToDo((oldToDos) => {
+      const toDosCopy = [...oldToDos];
+      toDosCopy.splice(source.index, 1);
+      toDosCopy.splice(destination.index, 0, draggableId);
+      return toDosCopy;
+    });
+
+    /* onDragEnd : drag => drop 후 동작에 대한 함수, result의 type은 DropResult
+      onDragEnd의 모든 전달 인자 = {
+        "draggableId": "a", // drag한 Draggable의 ID
+        "type": "DEFAULT",
+        "source": { //출발지
+            "index": 0, // Draggable의 본래 위치
+            "droppableId": "one" // Draggable이 있던 Droppable의 ID
+        },
+        "reason": "DROP",
+        "mode": "FLUID",
+        "destination": { //도착지
+            "droppableId": "one", // Draggable이 drop된 Droppable의 ID
+            "index": 1 // Draggable의 drop된 위치
+        },
+        "combine": null
+      }
+    */
   };
   return (
     <DragDropContext onDragEnd={onDragEnd}>
