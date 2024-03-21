@@ -1,9 +1,10 @@
 import styled from "styled-components";
-import { motion } from "framer-motion";
+import { MotionValue, motion } from "framer-motion";
 // motion: https://www.framer.com/motion/
 // animation :  https://www.framer.com/docs/animation
 import Variants from "./Variants";
 import Gestures from "./Gestures";
+import MotionValueBox from "./MotionValueBox";
 
 const Wrapper = styled.div`
   min-height: 100vh;
@@ -18,6 +19,7 @@ const Wrapper = styled.div`
 function App() {
   return (
     <Wrapper>
+      <MotionValueBox />
       <Gestures />
       <Variants />
     </Wrapper>
