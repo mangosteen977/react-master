@@ -9,7 +9,8 @@ const Wrapper = styled.div`
   align-items: center;
   height: 100vh;
 `;
-const Box = styled.div`
+const Box = styled(motion.div)`
+  /* styled(motion.elements) : styled-components에 motion.elements를 적용 */
   width: 200px;
   height: 200px;
   background-color: white;
@@ -18,9 +19,25 @@ const Box = styled.div`
 `;
 
 function App() {
+  const myVariants = {
+    start: { scale: 0 }, //initial
+    end: { scale: 1, rotateZ: 360, transition: { type: "spring", delay: 0.5 } }, //animate
+  };
   return (
     <Wrapper>
-      <Box />
+      {/*  <motion.div></motion.div>
+        animation을 적용하고자 하는 element는 motion.element 형태로 써야 함.
+        styled-components에서 쓸 수도 있음. */}
+      {/* motion: https://www.framer.com/motion/
+          animation :  https://www.framer.com/docs/animation */}
+      {/* animation */}
+      <Box
+        transition={{ type: "spring", delay: 0.5 }}
+        initial={{ scale: 0 }}
+        animate={{ scale: 1, rotateZ: 360 }}
+      />
+      {/* Variants : 오브젝트 내 프로퍼티명으로 나누어서 props를 줄 수 있음. */}
+      <Box variants={myVariants} initial="start" animate="end" />
     </Wrapper>
   );
 }
