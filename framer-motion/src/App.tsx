@@ -5,6 +5,7 @@ import { MotionValue, motion } from "framer-motion";
 import Variants from "./Variants";
 import Gestures from "./Gestures";
 import MotionValueBox from "./MotionValueBox";
+import Scroll from "./Scroll";
 
 const Wrapper = styled.div`
   min-height: 100vh;
@@ -19,6 +20,7 @@ const Wrapper = styled.div`
 function App() {
   return (
     <Wrapper>
+      <Scroll />
       <MotionValueBox />
       <Gestures />
       <Variants />
