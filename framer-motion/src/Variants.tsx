@@ -60,6 +60,7 @@ const circleVariants = {
 function Variants() {
   return (
     <Wrapper>
+      <h1>Variants</h1>
       {/* motion: https://www.framer.com/motion/
           animation :  https://www.framer.com/docs/animation */}
       <Box variants={boxVariants} initial="start" animate="end">

@@ -40,6 +40,7 @@ function Gestures() {
   const biggerBoxRef = useRef<HTMLDivElement>(null);
   return (
     <BiggerBox ref={biggerBoxRef}>
+      <h1>Gestures(drag)</h1>
       <Box
         drag
         dragConstraints={biggerBoxRef}

@@ -17,11 +17,11 @@ const Box = styled(motion.div)`
   /* styled(motion.elements) : styled-components에 motion.elements를 적용 */
   width: 300px;
   height: 300px;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
   background-color: white;
   border-radius: 20px;
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
+  padding-top: 50px;
+  text-align: center;
 `;
 
 const boxVariants = {};
@@ -37,7 +37,7 @@ function Scroll() {
   const scale = useTransform(scrollYProgress, [0, 1], [1, 5]);
   return (
     <Wrapper>
-      <Box style={{ scale }} />
+      <Box style={{ scale }}>scroll</Box>
     </Wrapper>
   );
 }

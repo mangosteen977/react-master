@@ -1,20 +1,6 @@
 import styled from "styled-components";
 import { motion } from "framer-motion";
 
-const Wrapper = styled(motion.div)`
-  height: 200vh;
-  width: 100vw;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-const Box = styled(motion.div)`
-  width: 200px;
-  height: 200px;
-  background-color: white;
-  border-radius: 20px;
-  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
-`;
 const Svg = styled.svg`
   width: 50vh;
   height: 50vh;
@@ -37,9 +23,10 @@ const svg = {
   },
 };
 
-function Scroll() {
+function LineDraw() {
   return (
     <>
+      <h1>LineDraw</h1>
       <Svg
         focusable="false"
         xmlns="http://www.w3.org/2000/svg"
@@ -63,4 +50,4 @@ function Scroll() {
     </>
   );
 }
-export default Scroll;
+export default LineDraw;

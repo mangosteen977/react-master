@@ -48,6 +48,7 @@ function MotionValueBox() {
   );
   return (
     <Wrapper style={{ background: gradient }}>
+      <h1>Motion Value (drag)</h1>
       <button onClick={() => x.set(200)}>Click Me</button>
       {/* x.set() : x의 값 설정 */}
       <Box style={{ x, rotateZ }} drag="x" dragSnapToOrigin />
