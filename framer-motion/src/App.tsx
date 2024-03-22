@@ -7,7 +7,7 @@ import Gestures from "./Gestures";
 import MotionValueBox from "./MotionValueBox";
 import Scroll from "./Scroll";
 import LineDraw from "./LineDraw";
-import AnimatePresence from "./AnimatePresence";
+import AnimatePresenceBox from "./AnimatePresenceBox";
 
 const Wrapper = styled.div`
   min-height: 100vh;
@@ -22,7 +22,7 @@ const Wrapper = styled.div`
 function App() {
   return (
     <Wrapper>
-      <AnimatePresence />
+      <AnimatePresenceBox />
       <LineDraw />
       <Scroll />
       <MotionValueBox />
