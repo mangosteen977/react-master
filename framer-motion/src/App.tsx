@@ -6,6 +6,7 @@ import Variants from "./Variants";
 import Gestures from "./Gestures";
 import MotionValueBox from "./MotionValueBox";
 import Scroll from "./Scroll";
+import LineDraw from "./LineDraw";
 
 const Wrapper = styled.div`
   min-height: 100vh;
@@ -20,6 +21,7 @@ const Wrapper = styled.div`
 function App() {
   return (
     <Wrapper>
+      <LineDraw />
       <Scroll />
       <MotionValueBox />
       <Gestures />

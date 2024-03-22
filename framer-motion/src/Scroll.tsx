@@ -29,9 +29,11 @@ const boxVariants = {};
 function Scroll() {
   const { scrollYProgress } = useScroll();
   // useScroll : 스크롤 발생 값(scroll(X/Y), scroll(X/Y)Progress)등을 받아옴
-  useMotionValueEvent(scrollYProgress, "change", () =>
-    console.log(scrollYProgress.get())
-  );
+
+  //scroll y progress 콘솔
+  // useMotionValueEvent(scrollYProgress, "change", () =>
+  // console.log(scrollYProgress.get())
+  // );
   const scale = useTransform(scrollYProgress, [0, 1], [1, 5]);
   return (
     <Wrapper>
