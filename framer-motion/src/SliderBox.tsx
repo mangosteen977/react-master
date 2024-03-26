@@ -3,8 +3,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 
 const Wrapper = styled(motion.div)`
-  height: 100vh;
+  height: 500px;
   width: 100vw;
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -17,7 +18,7 @@ const Box = styled(motion.div)`
   border-radius: 40px;
   display: flex;
   position: absolute;
-  top: 80px;
+  top: 30px;
   justify-content: center;
   align-items: center;
   font-size: 28px;
@@ -25,50 +26,67 @@ const Box = styled(motion.div)`
 `;
 
 const boxVariants = {
-  initial: {
-    x: 500,
+  entry: (customBack: boolean) => ({
+    x: customBack ? -500 : 500,
     opacity: 0,
     scale: 0,
-  },
-  visible: {
+  }),
+  center: {
     x: 0,
     opacity: 1,
     scale: 1,
-    transition: { duration: 1 },
+    transition: { duration: 0.3 },
   },
-  exit: {
-    x: -500,
+  exit: (customBack: boolean) => ({
+    x: customBack ? 500 : -500,
     opacity: 0,
-    // scale: 0,
-    rotateX: 180,
-    transition: { duration: 1 },
-  },
+    scale: 0,
+    // rotateX: 180,
+    transition: { duration: 0.3 },
+  }),
 };
 function SliderBox() {
   const [visible, setVisible] = useState(1);
-  const nextSlide = () => setVisible((prev) => (prev === 10 ? 10 : prev + 1));
+  const [back, setBack] = useState(false);
+  const nextSlide = async () => {
+    await setBack(false);
+    // setBack 이전에 setVisible이 먼저 이뤄지면서
+    // 새로운 element의 setBack state값이 잘못 들어가서 async+await으로 수정함.
+    setVisible((prev) => (prev === 10 ? 10 : prev + 1));
+  };
+  const prevSlide = async () => {
+    await setBack(true);
+    setVisible((prev) => (prev === 1 ? 1 : prev - 1));
+  };
   return (
     <>
       <h1>SliderBox</h1>
       <Wrapper>
         <AnimatePresence>
-          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(
-            (i) =>
-              i === visible && (
-                <Box
-                  key={i}
-                  variants={boxVariants}
-                  initial="initial"
-                  animate="visible"
-                  exit="exit"
-                >
-                  {i}
-                </Box>
-              )
-          )}
+          {/* mode="wait" : 이전 애니메이션이 끝나길 기다렸다가 다음 실행 */}
+          <Box
+            key={visible}
+            // 기존 key가 없어지면(변화하면) react는 element가 삭제되었다고 인식해서 exit 효과가 동작함
+            variants={boxVariants}
+            initial="entry"
+            animate="center"
+            exit="exit"
+            custom={back}
+            // custom : variants에 데이터를 보낼 수 있게 해주는 property
+            /*
+            const variants = {
+              visible: (custom) => ({
+                opacity: 1,
+                transition: { delay: custom * 0.2 }
+              })
+            }
+            */
+          >
+            {visible}
+          </Box>
         </AnimatePresence>
-        <button onClick={nextSlide}>prev</button>
         <button onClick={nextSlide}>next</button>
+        <button onClick={prevSlide}>prev</button>
       </Wrapper>
     </>
   );
