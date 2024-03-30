@@ -10,6 +10,7 @@ import LineDraw from "./LineDraw";
 import AnimatePresenceBox from "./AnimatePresenceBox";
 import SliderBox from "./SliderBox";
 import ShareLayout from "./ShareLayout";
+import ChallengePage from "./ChallengePage";
 
 const Wrapper = styled.div`
   min-height: 100vh;
@@ -24,6 +25,7 @@ const Wrapper = styled.div`
 function App() {
   return (
     <Wrapper>
+      <ChallengePage />
       <ShareLayout />
       <SliderBox />
       <AnimatePresenceBox />

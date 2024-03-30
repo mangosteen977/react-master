@@ -3,9 +3,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 
 const Wrapper = styled(motion.div)`
-  height: 100vh;
+  height: 500px;
   width: 100vw;
   display: flex;
+  position: relative;
   justify-content: center;
   align-items: center;
 `;
@@ -15,7 +16,7 @@ const Box = styled(motion.div)`
   background-color: rgba(255, 255, 255, 1);
   border-radius: 40px;
   position: absolute;
-  top: 100px;
+  top: 30px;
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
 `;
 
