@@ -17,6 +17,9 @@ const Box = styled(motion.div)`
   background-color: rgba(255, 255, 255, 1);
   border-radius: 40px;
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 const Grid = styled.div`
   display: grid;
@@ -37,26 +40,25 @@ const Overlay = styled(motion.div)`
 `;
 
 export function ChallengePage() {
-  const [clicked, setClicked] = useState(false);
-  const toggleClick = () => setClicked((prev) => !prev);
+  const [id, setId] = useState<null | string>(null);
   return (
     <>
       <h1>Challenge</h1>
-      <Wrapper onClick={toggleClick}>
+      <Wrapper>
         <Grid>
-          <Box layoutId="hello" />
-          <Box />
-          <Box />
-          <Box />
+          {["1", "2", "3", "4"].map((n) => (
+            <Box onClick={() => setId(n)} key={n} layoutId={n} />
+          ))}
         </Grid>
         <AnimatePresence>
-          {clicked ? (
+          {id !== null ? (
             <Overlay
+              onClick={() => setId(null)}
               initial={{ backgroundColor: "rgba(0, 0, 0, 0)" }}
               animate={{ backgroundColor: "rgba(0, 0, 0, 0.7)" }}
               exit={{ backgroundColor: "rgba(0, 0, 0, 0)" }}
             >
-              <Box layoutId="hello" style={{ width: 400, height: 200 }} />
+              <Box layoutId={id} style={{ width: 400, height: 200 }} />
             </Overlay>
           ) : null}
         </AnimatePresence>
