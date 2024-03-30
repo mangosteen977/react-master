@@ -9,6 +9,7 @@ import Scroll from "./Scroll";
 import LineDraw from "./LineDraw";
 import AnimatePresenceBox from "./AnimatePresenceBox";
 import SliderBox from "./SliderBox";
+import ShareLayout from "./ShareLayout";
 
 const Wrapper = styled.div`
   min-height: 100vh;
@@ -23,6 +24,7 @@ const Wrapper = styled.div`
 function App() {
   return (
     <Wrapper>
+      <ShareLayout />
       <SliderBox />
       <AnimatePresenceBox />
       <LineDraw />
