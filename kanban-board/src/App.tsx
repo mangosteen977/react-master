@@ -7,7 +7,7 @@ import Board from "./components/Board";
 const Wraper = styled.div`
   border: 1px solid red;
   display: flex;
-  max-width: 680px;
+  max-width: 1200px;
   width: 100%;
   height: 100vh;
   margin: 0 auto;
@@ -15,11 +15,11 @@ const Wraper = styled.div`
   align-items: center;
 `;
 const Boards = styled.div`
-  border: 1px solid red;
+  border: 1px solid hotpink;
   display: grid;
   width: 100%;
   gap: 10px;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(3, 1fr);
 `;
 
 function App() {
