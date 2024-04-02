@@ -5,7 +5,6 @@ import { toDoStateAtom } from "./atom";
 import Board from "./components/Board";
 
 const Wraper = styled.div`
-  border: 1px solid red;
   display: flex;
   max-width: 1200px;
   width: 100%;

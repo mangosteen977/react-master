@@ -2,15 +2,15 @@ import React from "react";
 import { Draggable } from "react-beautiful-dnd";
 import styled from "styled-components";
 
-const Card = styled.div<{ isDraggin: boolean }>`
+const Card = styled.div<{ $isDraggin: boolean }>`
   border-radius: 5px;
   padding: 10px;
   margin-bottom: 5px;
   // isDraggin인 경우 shadow
   box-shadow: ${(props) =>
-    props.isDraggin ? "0px 2px 5px rgba(0,0,0,0.6)" : "none"};
+    props.$isDraggin ? "0px 2px 5px rgba(0,0,0,0.6)" : "none"};
   background-color: ${(props) =>
-    props.isDraggin ? "#74b9ff" : props.theme.cardColor};
+    props.$isDraggin ? "#74b9ff" : props.theme.cardColor};
 `;
 interface IDragabbleCardProps {
   toDo: string;
@@ -38,7 +38,7 @@ function DragabbleCard({ toDo, index }: IDragabbleCardProps) {
           }
         */
         <Card
-          isDraggin={snapshot.isDragging}
+          $isDraggin={snapshot.isDragging}
           ref={magic.innerRef}
           {...magic.draggableProps}
           {...magic.dragHandleProps} //drag가 가능 할 부분 설정, drag 손잡이.

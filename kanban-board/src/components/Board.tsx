@@ -15,9 +15,9 @@ const Wrapper = styled.div`
 const BoardWrapper = styled.div<IBoardWrapperProps>`
   // isDraggingOver : 드래거블이 드롭어블 위에 오버될 경우 bg변경
   background-color: ${(props) =>
-    props.isDraggingOver
+    props.$isDraggingOver
       ? "#abd5fe"
-      : props.draggingFromThisWith
+      : props.$draggingFromThisWith
       ? "#b2bec3"
       : "transparent"};
   transition: background-color 0.3s ease-in-out;
@@ -37,8 +37,8 @@ interface IBoardProps {
   boardId: string;
 }
 interface IBoardWrapperProps {
-  isDraggingOver: boolean;
-  draggingFromThisWith: boolean;
+  $isDraggingOver: boolean;
+  $draggingFromThisWith: boolean;
 }
 function Board({ toDos, boardId }: IBoardProps) {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -70,8 +70,8 @@ function Board({ toDos, boardId }: IBoardProps) {
           }
         */
           <BoardWrapper
-            isDraggingOver={snapshot.isDraggingOver}
-            draggingFromThisWith={Boolean(snapshot.draggingFromThisWith)}
+            $isDraggingOver={snapshot.isDraggingOver}
+            $draggingFromThisWith={Boolean(snapshot.draggingFromThisWith)}
             ref={magic.innerRef}
             // reference :react JS components를 통해 HTML요소를 가져와 사용 (event등..)
             {...magic.droppableProps}
