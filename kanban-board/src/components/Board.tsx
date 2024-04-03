@@ -1,16 +1,19 @@
 import { Droppable } from "react-beautiful-dnd";
 import styled from "styled-components";
 import DragabbleCard from "./DragabbleCard";
-import { useRef } from "react";
+// import { useRef } from "react";
+import { IToDo } from "../atom";
+import AddToDo from "./AddToDo";
 
 const Wrapper = styled.div`
-  min-height: 200px;
-  padding: 20px 10px;
-  padding-top: 30px;
+  width: 100%;
+  max-width: 380px;
+  padding-top: 20px;
   border-radius: 5px;
   background-color: ${(props) => props.theme.boardColor};
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
 `;
 const BoardWrapper = styled.div<IBoardWrapperProps>`
   // isDraggingOver : 드래거블이 드롭어블 위에 오버될 경우 bg변경
@@ -24,16 +27,19 @@ const BoardWrapper = styled.div<IBoardWrapperProps>`
 
   flex-grow: 1;
   padding: 20px;
+  max-height: 500px;
+  height: fit-content;
+  overflow-y: auto;
 `;
 const Title = styled.h1`
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 600;
-  text-align: center;
+  text-indent: 20px;
   margin-bottom: 10px;
 `;
 
 interface IBoardProps {
-  toDos: string[];
+  toDos: IToDo[];
   boardId: string;
 }
 interface IBoardWrapperProps {
@@ -41,21 +47,21 @@ interface IBoardWrapperProps {
   $draggingFromThisWith: boolean;
 }
 function Board({ toDos, boardId }: IBoardProps) {
-  const inputRef = useRef<HTMLInputElement>(null);
-  // useRef : useRef hook, HTML method접근
-  const onClick = () => {
-    // 클릭 시 focus <=> 5초 후 blur
-    inputRef.current?.focus();
-    // .current : 프로퍼티로 전달된 인자(initialValue), 변경 가능한 값이 담김
-    setTimeout(() => {
-      inputRef.current?.blur();
-    }, 5000);
-  };
+  // const inputRef = useRef<HTMLInputElement>(null);
+  // // useRef : useRef hook, HTML method접근
+  // const onClick = () => {
+  //   // 클릭 시 focus <=> 5초 후 blur
+  //   inputRef.current?.focus();
+  //   // .current : 프로퍼티로 전달된 인자(initialValue), 변경 가능한 값이 담김
+  //   setTimeout(() => {
+  //     inputRef.current?.blur();
+  //   }, 5000);
+  // };
   return (
     <Wrapper>
       <Title>{boardId}</Title>
-      <input ref={inputRef} type="text" placeholder="grab me" />
-      <button onClick={onClick}>Click me</button>
+      {/* <input ref={inputRef} type="text" placeholder="grab me" />
+      <button onClick={onClick}>Click me</button> */}
       <Droppable droppableId={boardId}>
         {/* Droppable : droppableId, children(function형태로/ReactElement(X)) required */}
         {(magic, snapshot) => (
@@ -76,14 +82,20 @@ function Board({ toDos, boardId }: IBoardProps) {
             // reference :react JS components를 통해 HTML요소를 가져와 사용 (event등..)
             {...magic.droppableProps}
           >
-            {toDos.map((toDo, i) => (
-              <DragabbleCard key={toDo} index={i} toDo={toDo} />
+            {toDos?.map((toDo, i) => (
+              <DragabbleCard
+                key={toDo.id}
+                index={i}
+                toDoId={toDo.id}
+                toDoText={toDo.text}
+              />
             ))}
             {magic.placeholder}
             {/* DroppableProvided.placeholder : 드래그 하는 동안 position:fixed*/}
           </BoardWrapper>
         )}
       </Droppable>
+      <AddToDo boardId={boardId} />
     </Wrapper>
   );
 }

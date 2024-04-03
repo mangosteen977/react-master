@@ -3,22 +3,24 @@ import styled from "styled-components";
 import { useRecoilState } from "recoil";
 import { toDoStateAtom } from "./atom";
 import Board from "./components/Board";
+import Header from "./components/Header";
 
 const Wraper = styled.div`
   display: flex;
-  max-width: 1200px;
+  max-width: 1400px;
   width: 100%;
   height: 100vh;
   margin: 0 auto;
   justify-content: center;
-  align-items: center;
+  /* align-items: center; */
 `;
 const Boards = styled.div`
-  border: 1px solid hotpink;
   display: grid;
   width: 100%;
   gap: 10px;
   grid-template-columns: repeat(3, 1fr);
+  align-items: start;
+  justify-items: center;
 `;
 
 function App() {
@@ -29,8 +31,9 @@ function App() {
       // 동일 보드 내 움직임
       setToDo((oldToDos) => {
         const boardCopy = [...oldToDos[source.droppableId]];
+        const taskObj = boardCopy[source.index];
         boardCopy.splice(source.index, 1);
-        boardCopy.splice(destination.index, 0, draggableId);
+        boardCopy.splice(destination.index, 0, taskObj);
         return {
           ...oldToDos,
           [source.droppableId]: boardCopy,
@@ -40,9 +43,10 @@ function App() {
       // 서로 다른 보드 내 움직임
       setToDo((oldToDos) => {
         const startBoardCopy = [...oldToDos[source.droppableId]];
+        const taskObj = startBoardCopy[source.index];
         const endBoardCopy = [...oldToDos[destination.droppableId]];
         startBoardCopy.splice(source.index, 1);
-        endBoardCopy.splice(destination.index, 0, draggableId);
+        endBoardCopy.splice(destination.index, 0, taskObj);
         return {
           ...oldToDos,
           [source.droppableId]: startBoardCopy,
@@ -70,16 +74,19 @@ function App() {
     */
   };
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
-      {/* DragDropContext :  onDragEnd()와 하위 children required*/}
-      <Wraper>
-        <Boards>
-          {Object.keys(toDos).map((boardId) => (
-            <Board key={boardId} boardId={boardId} toDos={toDos[boardId]} />
-          ))}
-        </Boards>
-      </Wraper>
-    </DragDropContext>
+    <>
+      <Header />
+      <DragDropContext onDragEnd={onDragEnd}>
+        {/* DragDropContext :  onDragEnd()와 하위 children required*/}
+        <Wraper>
+          <Boards>
+            {Object.keys(toDos).map((boardId) => (
+              <Board key={boardId} boardId={boardId} toDos={toDos[boardId]} />
+            ))}
+          </Boards>
+        </Wraper>
+      </DragDropContext>
+    </>
   );
 }
 
