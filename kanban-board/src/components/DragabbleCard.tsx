@@ -3,6 +3,8 @@ import { Draggable } from "react-beautiful-dnd";
 import styled from "styled-components";
 import edit from "../assets/edit.svg";
 import del from "../assets/delete.svg";
+import { toDoStateAtom } from "../atom";
+import { useSetRecoilState } from "recoil";
 
 const Card = styled.div<{ $isDraggin: boolean }>`
   width: 100%;
@@ -40,9 +42,25 @@ interface IDragabbleCardProps {
   toDoId: number;
   toDoText: string;
   index: number;
+  boardId: string;
 }
-function DragabbleCard({ toDoId, toDoText, index }: IDragabbleCardProps) {
+function DragabbleCard({
+  toDoId,
+  toDoText,
+  index,
+  boardId,
+}: IDragabbleCardProps) {
   // console.log(toDo, "render");
+  const setTodos = useSetRecoilState(toDoStateAtom);
+  const deleteToDo = () => {
+    setTodos((allBoards) => {
+      const delBoard = allBoards[boardId];
+      return {
+        ...allBoards,
+        [boardId]: [...delBoard.slice(0, index), ...delBoard.slice(index + 1)],
+      };
+    });
+  };
   return (
     <Draggable draggableId={toDoId + ""} index={index} key={toDoId}>
       {/* draggableId : string 타입이어야 하기 때문에 number 타입 + ""로 string형태로 바꿈. */}
@@ -71,7 +89,7 @@ function DragabbleCard({ toDoId, toDoText, index }: IDragabbleCardProps) {
         >
           <Text>{toDoText}</Text>
           <Imgs>
-            <img src={del} />
+            <img src={del} onClick={deleteToDo} />
             <img src={edit} />
           </Imgs>
         </Card>

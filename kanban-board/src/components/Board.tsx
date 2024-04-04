@@ -2,8 +2,10 @@ import { Droppable } from "react-beautiful-dnd";
 import styled from "styled-components";
 import DragabbleCard from "./DragabbleCard";
 // import { useRef } from "react";
-import { IToDo } from "../atom";
+import { IToDo, toDoStateAtom } from "../atom";
 import AddToDo from "./AddToDo";
+import close from "../assets/close.svg";
+import { useRecoilState, useSetRecoilState } from "recoil";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -31,11 +33,22 @@ const BoardWrapper = styled.div<IBoardWrapperProps>`
   height: fit-content;
   overflow-y: auto;
 `;
+const BoardTitle = styled.div`
+  /* border: 1px solid red; */
+  padding: 0 20px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  img {
+    width: 25px;
+    height: 25px;
+    filter: ${(props) => props.theme.invert};
+    cursor: pointer;
+  }
+`;
 const Title = styled.h1`
   font-size: 20px;
   font-weight: 600;
-  text-indent: 20px;
-  margin-bottom: 10px;
 `;
 
 interface IBoardProps {
@@ -57,9 +70,25 @@ function Board({ toDos, boardId }: IBoardProps) {
   //     inputRef.current?.blur();
   //   }, 5000);
   // };
+  const setAllToDos = useSetRecoilState(toDoStateAtom);
+  const deleteFolder = () => {
+    const message =
+      "Deleting a folder will delete all contents. Are you sure you want to delete the folder?";
+    if (window.confirm(message)) {
+      setAllToDos((allBoards) => {
+        let edited = { ...allBoards };
+        delete edited[boardId];
+        return edited;
+      });
+    }
+  };
   return (
     <Wrapper>
-      <Title>{boardId}</Title>
+      <BoardTitle>
+        <Title>{boardId}</Title>
+        <img src={close} onClick={deleteFolder} />
+      </BoardTitle>
+
       {/* <input ref={inputRef} type="text" placeholder="grab me" />
       <button onClick={onClick}>Click me</button> */}
       <Droppable droppableId={boardId}>
@@ -86,6 +115,7 @@ function Board({ toDos, boardId }: IBoardProps) {
               <DragabbleCard
                 key={toDo.id}
                 index={i}
+                boardId={boardId}
                 toDoId={toDo.id}
                 toDoText={toDo.text}
               />
