@@ -5,8 +5,8 @@ import night0 from "../assets/night_fill0.svg";
 import light1 from "../assets/light_fill1.svg";
 import night1 from "../assets/night_fill1.svg";
 import { useState } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { ToggleThemeAtom } from "../atom";
+import { useRecoilState } from "recoil";
+import { ToggleThemeAtom, toDoStateAtom } from "../atom";
 
 const Wraper = styled.div`
   width: 100%;
@@ -36,9 +36,25 @@ const Imgs = styled.div`
 `;
 function Header() {
   const [hover, setHover] = useState(false);
+  const [toDos, setToDos] = useRecoilState(toDoStateAtom);
+
   const makeNewFolder = () => {
-    console.log("11");
+    const folderName = prompt("Please enter the folder name to add.");
+    const allFolders = Object.keys(toDos);
+    if (folderName) {
+      const duplicateCheck = allFolders.includes(folderName);
+      if (duplicateCheck) {
+        return alert("There already exists a folder with the same name.");
+      }
+      setToDos((allBoards) => {
+        return {
+          ...allBoards,
+          [folderName + ""]: [],
+        };
+      });
+    }
   };
+
   //Toggle Theme
   const [ToggleTheme, setToggleTheme] = useRecoilState(ToggleThemeAtom);
   return (
