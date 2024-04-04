@@ -1,7 +1,10 @@
 import { DragDropContext, DropResult } from "react-beautiful-dnd";
 import styled from "styled-components";
-import { useRecoilState } from "recoil";
-import { toDoStateAtom } from "./atom";
+import { ThemeProvider } from "styled-components";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { ToggleThemeAtom, toDoStateAtom } from "./atom";
+import { darkTheme, lightTheme } from "./theme";
+import CustomGlobalStyle from "./CustomGlobalStyle";
 import Board from "./components/Board";
 import Header from "./components/Header";
 
@@ -73,20 +76,25 @@ function App() {
       }
     */
   };
+  //Toggle Theme
+  const ToggleTheme = useRecoilValue(ToggleThemeAtom);
   return (
-    <>
-      <Header />
-      <DragDropContext onDragEnd={onDragEnd}>
-        {/* DragDropContext :  onDragEnd()와 하위 children required*/}
-        <Wraper>
-          <Boards>
-            {Object.keys(toDos).map((boardId) => (
-              <Board key={boardId} boardId={boardId} toDos={toDos[boardId]} />
-            ))}
-          </Boards>
-        </Wraper>
-      </DragDropContext>
-    </>
+    <ThemeProvider theme={ToggleTheme ? lightTheme : darkTheme}>
+      <CustomGlobalStyle />
+      <>
+        <Header />
+        <DragDropContext onDragEnd={onDragEnd}>
+          {/* DragDropContext :  onDragEnd()와 하위 children required*/}
+          <Wraper>
+            <Boards>
+              {Object.keys(toDos).map((boardId) => (
+                <Board key={boardId} boardId={boardId} toDos={toDos[boardId]} />
+              ))}
+            </Boards>
+          </Wraper>
+        </DragDropContext>
+      </>
+    </ThemeProvider>
   );
 }
 

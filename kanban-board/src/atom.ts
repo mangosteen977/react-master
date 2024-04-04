@@ -24,3 +24,9 @@ export const toDoStateAtom = atom<IToDoStateAtom>({
     ],
   },
 });
+
+//Dark/Light Mode
+export const ToggleThemeAtom = atom<boolean>({
+  key: "toggleTheme",
+  default: true,
+});
